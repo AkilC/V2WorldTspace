@@ -13,5 +13,5 @@ gameServer.define('my_room', MyRoom);
 
 app.use('/colyseus', monitor());
 
-gameServer.listen(3001);
-console.log(`Colyseus server is listening on port 3001`);
+const PORT = process.env.PORT || 3001;
+gameServer.listen(PORT, () => console.log(`Colyseus server is listening on port ${PORT}`));

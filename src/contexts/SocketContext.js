@@ -13,7 +13,8 @@ export const SocketProvider = ({ children }) => {
   const [room, setRoom] = useState(null);
 
   useEffect(() => {
-    const newClient = new Client('ws://localhost:3001');
+    const endpoint = process.env.REACT_APP_COLYSEUS_SERVER_URL || 'ws://localhost:3001';
+    const newClient = new Client(endpoint);
     setClient(newClient);
   }, []);
 
