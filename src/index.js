@@ -6,6 +6,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+document.addEventListener(
+  'touchmove',
+  function (event) {
+    if (!event.target.classList.contains('allow-scrolling')) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
+
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>

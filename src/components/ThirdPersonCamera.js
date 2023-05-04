@@ -1,4 +1,4 @@
-// ✅
+//Mobile Controls
 import React, { useRef, useState, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
@@ -8,35 +8,71 @@ import * as THREE from 'three';
 import { useSocket } from '../contexts/SocketContext';
 import TestScene from '../scenes/TestScene';
 
-const ThirdPersonCamera = ( {characterRef} ) => {
+
+const ThirdPersonCamera = ({ characterRef, joystickData }) => {
   const { setDefaultCamera } = useThree();
   const cameraRef = useRef();
-  /* const characterRef = useRef(); */
 
   const { room } = useSocket();
-  /* console.log('ThirdPersonCamera characterRef:', characterRef);  */
 
   const handleCharacterUpdate = (characterData) => {
-    /* console.log("handleCharacterUpdate called:", characterData ); */
     if (!room) return;
 
     room.send('playerUpdate', characterData);
   };
 
-  const { animation, cameraAngle, up, down, left, right } = useCharacterControls(characterRef, handleCharacterUpdate);
+  const { animation, cameraAngle, setCameraAngle, up, down, left, right } = useCharacterControls(
+    characterRef,
+    handleCharacterUpdate,
+    joystickData
+  );
 
   const cameraDistance = 4.5;
   const cameraHeight = 3;
   const smoothness = 0.05;
 
+  const [isDragging, setIsDragging] = useState(false);
+  const [lastClientX, setLastClientX] = useState(null);
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      setIsDragging(true);
+      setLastClientX(event.clientX);
+    };
+
+    const handlePointerUp = (event) => {
+      setIsDragging(false);
+    };
+
+    const handlePointerMove = (event) => {
+      if (!isDragging) return;
+
+      const deltaX = event.clientX - lastClientX;
+      setCameraAngle((prevAngle) => prevAngle - deltaX * 0.005);
+      setLastClientX(event.clientX);
+    };
+
+    const canvas = document.querySelector('canvas');
+    if (!canvas) return;
+
+    canvas.addEventListener('pointerdown', handlePointerDown);
+    canvas.addEventListener('pointerup', handlePointerUp);
+    canvas.addEventListener('pointermove', handlePointerMove);
+
+    return () => {
+      canvas.removeEventListener('pointerdown', handlePointerDown);
+      canvas.removeEventListener('pointerup', handlePointerUp);
+      canvas.removeEventListener('pointermove', handlePointerMove);
+    };
+  }, [isDragging, lastClientX]);
+
+
   useFrame(() => {
     if (!characterRef.current || !cameraRef.current) return;
 
     const character = characterRef.current;
-    // Add the camera angle offset
     const cameraAngleOffset = Math.PI;
 
-    // Calculate the desired camera position based on the player's position and cameraAngle
     const desiredPosition = {
       x: character.position.x + Math.sin(cameraAngle + cameraAngleOffset) * cameraDistance,
       y: character.position.y + cameraHeight,
@@ -51,8 +87,6 @@ const ThirdPersonCamera = ( {characterRef} ) => {
       character.position.z
     );
 
-
-    // Use lerp to smoothly adjust the camera's position and look at the player
     cameraRef.current.position.lerp(desiredPosition, smoothness);
     cameraRef.current.lookAt(lookAtTarget);
   });

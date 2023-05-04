@@ -4,7 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 
-const OtherPlayer = ({ animation, position, rotation, ...props }) => {
+const OtherPlayer = ({ animation, position, quaternion, ...props }) => {
   const groupRef = useRef();
   const [mixer, setMixer] = useState(null);
   const [characterModel, setCharacterModel] = useState(null);
@@ -14,12 +14,6 @@ const OtherPlayer = ({ animation, position, rotation, ...props }) => {
     loader.load(`${process.env.PUBLIC_URL}/assets/centeredChar1.gltf`, (gltf) => {
       const model = gltf.scene;
       const animations = gltf.animations;
-
-      /* model.traverse((child) => {
-        if (child.isMesh) {
-          child.material = new THREE.MeshStandardMaterial({ color: 'red' });
-        }
-      }); */
 
       setCharacterModel({ scene: model, animations });
     });
@@ -48,10 +42,14 @@ const OtherPlayer = ({ animation, position, rotation, ...props }) => {
     if (mixer) {
       mixer.update(delta);
     }
+
+    if (groupRef.current) {
+      groupRef.current.quaternion.copy(quaternion);
+    }
   });
 
   return characterModel ? (
-    <group ref={groupRef} {...props} position={position} rotation={rotation} scale={[0.35, 0.35, 0.35]} dispose={null}>
+    <group ref={groupRef} {...props} position={position} scale={[0.35, 0.35, 0.35]} dispose={null}>
       <primitive object={characterModel.scene} />
     </group>
   ) : null;

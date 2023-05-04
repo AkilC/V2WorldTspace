@@ -4,6 +4,7 @@ import { useSocket } from '../contexts/SocketContext';
 import OtherPlayer from './OtherPlayer';
 import Character from './Character';
 import { Box } from '@react-three/drei';
+import * as cannon from 'cannon-es';
 
 const Multiplayer = () => {
   const { room } = useSocket();
@@ -40,17 +41,21 @@ const Multiplayer = () => {
         .filter(([, playerData]) => playerData.position !== undefined && playerData.rotation !== undefined)
         .map(([id, playerData]) => {
             /* console.log(`Rendering player ${id} at position:`, playerData.position); */
+            const receivedRotationAngle = playerData.rotation;
+            const remoteCharacterQuaternion = new cannon.Quaternion();
+            remoteCharacterQuaternion.setFromAxisAngle(new cannon.Vec3(0, 1, 0), receivedRotationAngle);
+
             const interpolatedPosition = [
-                playerData.position.x * 0.9,
-                playerData.position.y * 0.9,
-                playerData.position.z * 0.9,
+                playerData.position.x * 0.98,
+                playerData.position.y * 0.98,
+                playerData.position.z * 0.98,
             ];
             /* console.log("Current players:", players); */
             return (
                 <OtherPlayer
                   key={id}
                   position={interpolatedPosition}
-                  rotation={[0, playerData.rotation, 0]}
+                  quaternion={remoteCharacterQuaternion}
                   animation={playerData.animation}
                 />
               );
