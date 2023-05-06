@@ -40,6 +40,7 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
     const groundShape = new CannonPlane();
     const groundBody = new Body({ mass: 0 });
     groundBody.addShape(groundShape);
+    groundBody.position.set(0, -0.5,0);
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     world.addBody(groundBody);
   }, [ world, ref, isWorldInitialized]);
@@ -49,7 +50,7 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
       return;
     }
 
-    const maxDelta = 0.1;
+    const maxDelta = 0.05;
     const clampedDelta = Math.min(deltaTime, maxDelta);
     if (world) {
       world.step(clampedDelta);

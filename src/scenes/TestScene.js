@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { ObjectLoader } from 'three';
 import { useThree, extend } from '@react-three/fiber';
-import Portal from '../components/Portal';
+import V2Portal from '../portals/V2Portal';
+import BelovedPortal from '../portals/BelovedPortal';
 import { Body, World, Plane as CannonPlane } from 'cannon-es';
 import { useFrame } from '@react-three/fiber';
 import { useNavigate, Outlet} from 'react-router-dom';
@@ -35,6 +36,8 @@ const TestScene = ({ characterRef }) => {
 
   const { size, camera, scene } = useThree();
   const resolution = useMemo(() => new THREE.Vector2(size.width, size.height), [size]);
+
+  console.log('Scene state in TestScene:', scene);
 
   useEffect(() => {
     console.log('TestScene mounted');
@@ -94,12 +97,12 @@ const TestScene = ({ characterRef }) => {
   return (
     <>
       {myScene && <primitive object={myScene} />}
-      <Portal
+      <V2Portal
         world={world}
         characterRef={characterRef}
-        position={[-3, 1, -5]}
-        size={[1, 1, 1]}
-        destination="/scene1"
+        position={[-5, 0, -5]}
+        size={[4, 4, 4]}
+        destination="/"
         onCharacterEnter={(destination) => {
           /* console.log(`Character entered portal, navigating to ${destination}`); */
           if (navigate) {
@@ -109,11 +112,11 @@ const TestScene = ({ characterRef }) => {
           }
         }}
       />
-      <Portal
+      <BelovedPortal
         world={world}
         characterRef={characterRef}
-        position={[3, 1, -5]} // Set a different position for this portal
-        size={[1, 1, 1]}
+        position={[5, 0, -5]} // Set a different position for this portal
+        size={[4, 4, 4]}
         destination="/" // Set a different destination for this portal
         onCharacterEnter={(destination) => {
           /* console.log(`Character entered portal, navigating to ${destination}`); */
@@ -130,9 +133,9 @@ const TestScene = ({ characterRef }) => {
         {/* <CustomPixelationEffect pixelSize={4.0} /> */}
         {/* Other passes */}
       {/* </EffectComposer> */}
-      <Effects>
+      {/* <Effects>
         <renderPixelatedPass args={[resolution, 2, scene, camera]} />
-      </Effects>
+      </Effects> */}
     </>
   );
 };

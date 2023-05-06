@@ -24,8 +24,8 @@ const ScenesHandler = ({ characterRef }) => {
             element={<TestScene characterRef={characterRef} />}
           />
           <Route
-            key="scene1"
-            path="/scene1"
+            key="testScene"
+            path="/Scene1"
             element={<Scene1 characterRef={characterRef} />}
           />
         </Routes>

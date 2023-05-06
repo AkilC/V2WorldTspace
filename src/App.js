@@ -17,6 +17,7 @@ import WorldContextProvider from './contexts/WorldContext';
 import MobileJoystick from './components/MobileControls';
 
 
+
 const App = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [showWelcomeScreen, setShowWelcomeScreen] = useState(true);
@@ -49,7 +50,7 @@ const App = () => {
       <SocketProvider>
           <WorldContextProvider>
             <div className="app-container">
-              <Canvas key={key} backgroundColor="#8e9bfe" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
+              <Canvas  gl={{ stencil: true }} key={key} backgroundColor="#8e9bfe" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
                 {/* <Scene1/> */}
                 <ScenesHandler characterRef={characterRef} />
                 {/* <OrbitControls enabled={true} /> */}
