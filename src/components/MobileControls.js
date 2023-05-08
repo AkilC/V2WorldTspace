@@ -1,5 +1,7 @@
+// good but causing problems
 import React, { useEffect, useState, useRef } from 'react';
 import nipplejs from 'nipplejs';
+import { useCallback } from 'react';
 import { throttle } from 'lodash';
 
 const MobileJoystick = ({ onJoystickMove }) => {

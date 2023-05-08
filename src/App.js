@@ -1,4 +1,4 @@
-// Mobile Controls
+// Mobile Controls - Good but causing issues
 import React, { useState, useRef, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
@@ -15,13 +15,13 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import ScenesHandler from './scenes/ScenesHandler';
 import WorldContextProvider from './contexts/WorldContext';
 import MobileJoystick from './components/MobileControls';
-
-
+import Loading from './components/Loading';
 
 const App = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [showWelcomeScreen, setShowWelcomeScreen] = useState(true);
   const characterRef = useRef();
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const key = useMemo(() => location.pathname, [location]);
 
@@ -50,7 +50,7 @@ const App = () => {
       <SocketProvider>
           <WorldContextProvider>
             <div className="app-container">
-              <Canvas  gl={{ stencil: true }} key={key} backgroundColor="#8e9bfe" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
+              <Canvas  gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
                 {/* <Scene1/> */}
                 <ScenesHandler characterRef={characterRef} />
                 {/* <OrbitControls enabled={true} /> */}
@@ -58,6 +58,7 @@ const App = () => {
                 {/* <Stars/> */}
                 <Multiplayer />
               </Canvas>
+              {isLoading && <Loading onLoadComplete={() => setIsLoading(false)} />}
               {/* {showWelcomeScreen && <WelcomeScreen onEnter={() => setShowWelcomeScreen(false)} />} */}
               <MobileJoystick onJoystickMove={(data) => handleJoystickMove(data)} />
               <div className="icon-container">
