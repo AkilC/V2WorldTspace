@@ -66,7 +66,7 @@ const ThirdPersonCamera = ({ characterRef, joystickData }) => {
     };
   }, [isDragging, lastClientX]);
 
-
+  const tempVec3 = new THREE.Vector3();
   useFrame(() => {
     if (!characterRef.current || !cameraRef.current) return;
 
@@ -81,14 +81,15 @@ const ThirdPersonCamera = ({ characterRef, joystickData }) => {
 
     const yOffset = 2.5;
 
-    const lookAtTarget = new THREE.Vector3(
+    /* const lookAtTarget = new THREE.Vector3(
       character.position.x,
       character.position.y + yOffset,
       character.position.z
-    );
+    ); */
+    tempVec3.set(character.position.x, character.position.y + yOffset, character.position.z);
 
     cameraRef.current.position.lerp(desiredPosition, smoothness);
-    cameraRef.current.lookAt(lookAtTarget);
+    cameraRef.current.lookAt(tempVec3);
   });
 
   return (
