@@ -6,8 +6,9 @@ const defaultPlayerData = {
 };
 
 class MyRoom extends Room {
-  onCreate() {
+  onCreate(options) {
     this.players = {};
+    this.domain = options.domain;
 
     console.log('Room created:', this.roomId);
 

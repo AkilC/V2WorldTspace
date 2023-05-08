@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import nipplejs from 'nipplejs';
+import { throttle } from 'lodash';
 
 const MobileJoystick = ({ onJoystickMove }) => {
   const [joystickManager, setJoystickManager] = useState(null);
@@ -29,9 +30,9 @@ const MobileJoystick = ({ onJoystickMove }) => {
         onJoystickMove(null); // Set joystickData to null when the joystick is released
       };
 
-      const onMove = (evt, data) => {
+      const onMove = throttle((evt, data) => {
         onJoystickMove(data);
-      };
+      }, 100);
 
       joystickManager.on('start', onStart);
       joystickManager.on('end', onEnd);

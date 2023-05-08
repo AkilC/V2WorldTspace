@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { ObjectLoader } from 'three';
 import { useThree, extend } from '@react-three/fiber';
 import V2Portal from '../portals/V2Portal';
-import BelovedPortal from '../portals/BelovedPortal';
+import HomePortal from '../portals/HomePortal';
 import { Body, World, Plane as CannonPlane } from 'cannon-es';
 import { useFrame } from '@react-three/fiber';
 import { useNavigate, Outlet} from 'react-router-dom';
@@ -11,6 +11,7 @@ import { EffectComposer } from '@react-three/postprocessing';
 import { RenderPixelatedPass } from 'three-stdlib';
 import { Effects } from '@react-three/drei';
 import WorldContext from '../contexts/WorldContext';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 // Extend the RenderPixelatedPass
 extend({ RenderPixelatedPass });
@@ -37,10 +38,13 @@ const TestScene = ({ characterRef }) => {
   const { size, camera, scene } = useThree();
   const resolution = useMemo(() => new THREE.Vector2(size.width, size.height), [size]);
 
-  console.log('Scene state in TestScene:', scene);
-
   useEffect(() => {
     console.log('TestScene mounted');
+  
+    const loader = new GLTFLoader();
+    loader.load(`${process.env.PUBLIC_URL}/assets/scenes/V2Space.glb`, (gltf) => {
+      setMyScene(gltf.scene);
+    });
   
     return () => {
       console.log('TestScene unmounted');
@@ -86,56 +90,53 @@ const TestScene = ({ characterRef }) => {
     }
   }); */
 
-  useEffect(() => {
+  /* useEffect(() => {
 
     const loader = new ObjectLoader();
     loader.load(`${process.env.PUBLIC_URL}/assets/scenes/testScene.json`, (loadedScene) => {
       setMyScene(loadedScene);
     });
-  }, []);
+  }, []); */
 
   return (
     <>
       {myScene && <primitive object={myScene} />}
-      <V2Portal
+      <HomePortal
         world={world}
         characterRef={characterRef}
-        position={[-5, 0, -5]}
+        position={[0, 0, -10]}
         size={[4, 4, 4]}
-        destination="/"
+        destination="triber.spoace"
         onCharacterEnter={(destination) => {
-          /* console.log(`Character entered portal, navigating to ${destination}`); */
-          if (navigate) {
-            navigate(destination);
+          if (destination) {
+            window.location.href = `https://${destination}`;
           } else {
-            console.error('navigate object is undefined');
+            console.error('Destination not found:', destination);
           }
         }}
       />
-      <BelovedPortal
-        world={world}
-        characterRef={characterRef}
-        position={[5, 0, -5]} // Set a different position for this portal
-        size={[4, 4, 4]}
-        destination="/" // Set a different destination for this portal
-        onCharacterEnter={(destination) => {
-          /* console.log(`Character entered portal, navigating to ${destination}`); */
-          if (navigate) {
-            navigate(destination);
-          } else {
-            console.error('navigate object is undefined');
-          }
-        }}
-      />
+      <ambientLight intensity={0.2} />
+      <directionalLight
+          castShadow
+          position={[0.079,4.253, -0.268]}
+          intensity={2}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+          shadow-camera-far={50}
+          shadow-camera-left={-10}
+          shadow-camera-right={10}
+          shadow-camera-top={10}
+          shadow-camera-bottom={-10}
+        /> 
       <Background />
       {/* Add the EffectComposer and Pixelation effect */}
       {/* <EffectComposer> */}
         {/* <CustomPixelationEffect pixelSize={4.0} /> */}
         {/* Other passes */}
       {/* </EffectComposer> */}
-      {/* <Effects>
-        <renderPixelatedPass args={[resolution, 2, scene, camera]} />
-      </Effects> */}
+      <Effects>
+        <renderPixelatedPass args={[resolution, 1, scene, camera]} />
+      </Effects>
     </>
   );
 };

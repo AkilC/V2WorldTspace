@@ -1,4 +1,4 @@
-// ✅
+// Join from domain
 import { createContext, useContext, useState, useEffect } from 'react';
 import { Client } from 'colyseus.js';
 
@@ -14,6 +14,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     const endpoint = process.env.REACT_APP_COLYSEUS_SERVER_URL || 'ws://localhost:3001';
+    /* const endpoint = 'ws://localhost:3001'; */
     const newClient = new Client(endpoint);
     setClient(newClient);
   }, []);
@@ -21,7 +22,9 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     const joinRoom = async () => {
       if (!client) return;
-      const newRoom = await client.joinOrCreate('my_room');
+
+      const domain = window.location.hostname;
+      const newRoom = await client.joinOrCreate('my_room', { domain });
       setRoom(newRoom);
     };
 
