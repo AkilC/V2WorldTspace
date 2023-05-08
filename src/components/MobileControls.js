@@ -34,7 +34,7 @@ const MobileJoystick = ({ onJoystickMove }) => {
 
       const onMove = throttle((evt, data) => {
         onJoystickMove(data);
-      }, 100);
+      }, 20);
 
       joystickManager.on('start', onStart);
       joystickManager.on('end', onEnd);
