@@ -1,4 +1,3 @@
-// Updating for domain
 const express = require('express');
 const { Server } = require('colyseus');
 const { monitor } = require('@colyseus/monitor');
@@ -10,21 +9,20 @@ const gameServer = new Server({ server });
 
 // Define your room
 const { MyRoom } = require('./MyRoom');
-const roomFactory = (domain) => {
-    return (options) => {
-      const room = new MyRoom(options);
-      room.domain = domain;
-      return room;
-    };
-};
 
 const requestJoin = (options, isNew) => {
-    return (room) => {
-      return room.domain === options.domain;
-    };
+  return (room) => {
+    return room.domain === options.domain;
+  };
 };
-  
-gameServer.define('my_room', MyRoom, roomFactory, requestJoin);
+
+gameServer.define('my_room', MyRoom)
+  .onCreate((options) => {
+    const domain = options.domain || 'unknown';
+    this.domain = domain;
+    console.log('Room created:', this.roomId, 'with domain:', this.domain);
+  })
+  .onJoin(requestJoin);
 
 app.use('/colyseus', monitor());
 
