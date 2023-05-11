@@ -25,6 +25,7 @@ export const SocketProvider = ({ children }) => {
 
       const domain = window.location.hostname;
       const newRoom = await client.joinOrCreate('my_room', { domain });
+      console.log("NewRoom", newRoom);
       setRoom(newRoom);
     };
 
