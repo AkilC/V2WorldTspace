@@ -20,18 +20,17 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     const joinOrCreateRoom = async () => {
       if (!client) return;
-
+  
       const domain = window.location.hostname;
-
+  
       try {
-        const existingRoom = await client.join('my_room', { domain });
-        setRoom(existingRoom);
+        const room = await client.joinOrCreate('my_room', { domain });
+        setRoom(room);
       } catch (error) {
-        const newRoom = await client.create('my_room', { domain });
-        setRoom(newRoom);
+        console.error(error);
       }
     };
-
+  
     joinOrCreateRoom();
   }, [client]);
 
