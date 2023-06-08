@@ -2,16 +2,18 @@ import * as THREE from 'three';
 import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { ObjectLoader } from 'three';
 import { useThree, extend } from '@react-three/fiber';
-import V2Portal from '../portals/V2Portal';
-import HomePortal from '../portals/HomePortal';
+import V2Portal from '../tspace_components/portals/V2Portal';
+import HomePortal from '../tspace_components/portals/HomePortal';
 import { Body, World, Plane as CannonPlane } from 'cannon-es';
 import { useFrame } from '@react-three/fiber';
 import { useNavigate, Outlet} from 'react-router-dom';
 import { EffectComposer } from '@react-three/postprocessing';
 import { RenderPixelatedPass } from 'three-stdlib';
+import { Stars } from '@react-three/drei';
 import { Effects } from '@react-three/drei';
-import WorldContext from '../contexts/WorldContext';
+import WorldContext from '../tspace_components/contexts/WorldContext';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import TargetLocation from './TargetLocation';
 
 // Extend the RenderPixelatedPass
 extend({ RenderPixelatedPass });
@@ -42,7 +44,7 @@ const TestScene = ({ characterRef }) => {
     console.log('TestScene mounted');
   
     const loader = new GLTFLoader();
-    loader.load(`${process.env.PUBLIC_URL}/assets/scenes/V2Space.glb`, (gltf) => {
+    loader.load(`${process.env.PUBLIC_URL}/assets/scenes/v2v11scene.glb`, (gltf) => {
       setMyScene(gltf.scene);
     });
   
@@ -115,11 +117,19 @@ const TestScene = ({ characterRef }) => {
           }
         }}
       />
-      <ambientLight intensity={0.2} />
+      <TargetLocation
+        characterRef={characterRef}
+        position={[0, 2, 12]}
+        onReached={() => {
+          console.log('The character has reached the target!');
+          // any other logic you would like to add when the target is reached
+        }}
+      />
+{/*       <ambientLight intensity={1} /> */}
       <directionalLight
           castShadow
-          position={[0.079,4.253, -0.268]}
-          intensity={2}
+          position={[5, 126, 112]}
+          intensity={3}
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
           shadow-camera-far={50}
@@ -137,6 +147,7 @@ const TestScene = ({ characterRef }) => {
       <Effects>
         <renderPixelatedPass args={[resolution, 1, scene, camera]} />
       </Effects>
+      <Stars/>
     </>
   );
 };

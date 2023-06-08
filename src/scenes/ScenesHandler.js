@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes, useLocation, Outlet } from "react-router-dom";
 import TestScene from "./TestScene";
 import Scene1 from "./Scene1";
-import { WorldContext } from '../contexts/WorldContext';
+import { WorldContext } from '../tspace_components/contexts/WorldContext';
 
 const ScenesHandler = ({ characterRef }) => {
   const location = useLocation();
@@ -21,7 +21,7 @@ const ScenesHandler = ({ characterRef }) => {
           <Route
             key="testScene"
             path="/"
-            element={<TestScene characterRef={characterRef} />}
+            element={<TestScene characterRef={characterRef}/>}
           />
           <Route
             key="testScene"
