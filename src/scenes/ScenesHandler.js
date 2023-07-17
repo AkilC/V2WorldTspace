@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation, Outlet } from "react-router-dom";
-import TestScene from "./TestScene";
-import Scene1 from "./Scene1";
+import Hub from "./Hub";
+import Watch from "./Watch";
+import Listen from "./Listen";
 import { WorldContext } from '../tspace_components/contexts/WorldContext';
 
 const ScenesHandler = ({ characterRef }) => {
@@ -19,14 +20,19 @@ const ScenesHandler = ({ characterRef }) => {
       {isWorldInitialized && (
         <Routes>
           <Route
-            key="testScene"
+            key="Hub"
             path="/"
-            element={<TestScene characterRef={characterRef}/>}
+            element={<Hub characterRef={characterRef}/>}
           />
           <Route
-            key="testScene"
-            path="/Scene1"
-            element={<Scene1 characterRef={characterRef} />}
+            key="Watch"
+            path="/Watch"
+            element={<Watch characterRef={characterRef} />}
+          />
+          <Route
+            key="Listen"
+            path="/Listen"
+            element={<Listen characterRef={characterRef} />}
           />
         </Routes>
       )}

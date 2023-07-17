@@ -1,5 +1,5 @@
 // Mobile Controls - Good but causing issues
-import React, { useState, useRef, useMemo, useContext } from 'react';
+import React, { useState, useRef, useMemo, useContext, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import IconButton from './tspace_components/components/IconButton';
@@ -18,6 +18,8 @@ import MobileJoystick from './tspace_components/components/MobileControls';
 import Loading from './tspace_components/components/Loading';
 import { UIOverlayContext, UIOverlayContextProvider } from './tspace_components/contexts/UIOverlayContext';
 import UIOverlay from './tspace_components/components/UIOverlay';
+import ScenesHandler2D from './tspace_components/2D/ScenesHandler2D';
+import Nav3D from './tspace_components/components/Nav3D';
 
 const App = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -26,6 +28,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const key = useMemo(() => location.pathname, [location]);
+  const [is3D, setIs3D] = useState(true);
 
   const [joystickData, setJoystickData] = useState(null);
 
@@ -42,6 +45,8 @@ const App = () => {
   const handleIconClick = (iconName) => {
     if (iconName === 'thlarge') {
       setIsOverlayOpen(!isOverlayOpen);
+    } else if (iconName === 'cog') {
+      setIs3D(!is3D); // toggle between 3D and 2D
     } else {
       console.log(`Icon ${iconName} clicked.`);
     }
@@ -53,17 +58,21 @@ const App = () => {
       <SocketProvider>
           <WorldContextProvider>
             <div className="app-container">
-              <Canvas  gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
-                {/* <Scene1/> */}
-                <ScenesHandler characterRef={characterRef}/>
-                {/* <OrbitControls enabled={true} /> */}
-                <ThirdPersonCamera characterRef={characterRef} joystickData={joystickData}/>
-                {/* <Stars/> */}
-                <Multiplayer />
-              </Canvas>
+              {is3D ? (
+                <Canvas gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
+                  <Suspense fallback={null}> {/* Use Suspense for async loading */}
+                    <ScenesHandler characterRef={characterRef} />
+                    <ThirdPersonCamera characterRef={characterRef} joystickData={joystickData}/>
+                    <Multiplayer />
+                  </Suspense>
+                </Canvas>
+              ) : (
+                <ScenesHandler2D /> // Your 2D view outside of Canvas
+              )}
               {isLoading && <Loading onLoadComplete={() => setIsLoading(false)} />}
               {/* {showWelcomeScreen && <WelcomeScreen onEnter={() => setShowWelcomeScreen(false)} />} */}
               <MobileJoystick onJoystickMove={(data) => handleJoystickMove(data)} />
+              {is3D && <Nav3D />}
               <div className="icon-container">
                 <IconButton icon={faCog} onClick={() => handleIconClick('cog')} />
                 <IconButton icon={faUser} onClick={() => handleIconClick('user')} />
