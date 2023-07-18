@@ -1,4 +1,3 @@
-//Mobile Controls
 import React, { useRef, useState, useEffect } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
@@ -80,11 +79,6 @@ const ThirdPersonCamera = ({ characterRef, joystickData }) => {
 
     const yOffset = 2.5;
 
-    /* const lookAtTarget = new THREE.Vector3(
-      character.position.x,
-      character.position.y + yOffset,
-      character.position.z
-    ); */
     tempVec3.set(character.position.x, character.position.y + yOffset, character.position.z);
 
     cameraRef.current.position.lerp(desiredPosition, smoothness);

@@ -40,7 +40,10 @@ const DesktopNav = () => {
 
   return (
     <div style={styles.desktopNav}>
-      <img onClick={() => navigate(`/`)} style={styles.logo} src={process.env.PUBLIC_URL + '/assets/V2Logo-02.png'} alt="Logo" />
+      <div style={styles.logoAndGhostContainer}>
+        <img onClick={() => navigate(`/`)} style={styles.logo} src={process.env.PUBLIC_URL + '/assets/V2Logo-02.png'} alt="Logo" />
+        <div style={styles.ghostContainer}></div>
+      </div>
       <div style={styles.navItemsContainer}>
         {navItems.map((item, index) => (
           <div key={index} style={styles.navItem} onClick={() => navigate(`/${item}`)}>
@@ -114,10 +117,15 @@ const styles = {
     position: 'absolute',
     top: 0,
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     color: 'white',
-    padding: '12px 16px',
+    padding: '16px 32px',
     boxSizing: 'border-box',
+  },
+  logoAndGhostContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '7%', // set this to match the width of your icon container
   },
   navItemsContainer: {
     display: 'flex',
@@ -137,6 +145,9 @@ const styles = {
     width: 'auto',
     cursor: 'pointer',
   },
+  ghostContainer: {
+    flex: '1 1 auto', // this makes the ghost container fill up all available space, pushing the logo to the left
+  },
   iconContainer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -145,6 +156,7 @@ const styles = {
     borderRadius: '120px',
     paddingLeft: '8px',
     paddingRight: '8px',
+    width: 'auto',
   },
   sideDrawer: {
     position: 'fixed',

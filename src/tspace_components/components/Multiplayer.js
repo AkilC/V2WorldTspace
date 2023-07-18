@@ -1,4 +1,3 @@
-// ✅
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '../contexts/SocketContext';
 import OtherPlayer from './OtherPlayer';
@@ -19,8 +18,6 @@ const Multiplayer = () => {
       });
 
     room.onMessage('playerUpdate', (playerData) => {
-      /* console.log('Player update:', playerData); */
-      /* if (Object.keys(players).length === 2) {console.log('Player update:', playerData);} // When the third player joins */
       setPlayers((players) => ({ ...players, [playerData.id]: playerData }));
     });
 
@@ -40,7 +37,6 @@ const Multiplayer = () => {
         {Object.entries(players)
         .filter(([, playerData]) => playerData.position !== undefined && playerData.rotation !== undefined)
         .map(([id, playerData]) => {
-            /* console.log(`Rendering player ${id} at position:`, playerData.position); */
             const receivedRotationAngle = playerData.rotation;
             const remoteCharacterQuaternion = new cannon.Quaternion();
             remoteCharacterQuaternion.setFromAxisAngle(new cannon.Vec3(0, 1, 0), receivedRotationAngle);
@@ -50,7 +46,6 @@ const Multiplayer = () => {
                 playerData.position.y * 0.98,
                 playerData.position.z * 0.98,
             ];
-            /* console.log("Current players:", players); */
             return (
                 <OtherPlayer
                   key={id}
