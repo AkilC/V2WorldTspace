@@ -73,11 +73,11 @@ const App = () => {
               {/* {showWelcomeScreen && <WelcomeScreen onEnter={() => setShowWelcomeScreen(false)} />} */}
               <MobileJoystick onJoystickMove={(data) => handleJoystickMove(data)} />
               {is3D && <Nav3D />}
-              <div className="icon-container">
+              {/* <div className="icon-container">
                 <IconButton icon={faCog} onClick={() => handleIconClick('cog')} />
                 <IconButton icon={faUser} onClick={() => handleIconClick('user')} />
                 <IconButton icon={faThLarge} onClick={() => handleIconClick('thlarge')} />
-              </div>
+              </div> */}
               {isOverlayOpen && <Overlay onClose={() => setIsOverlayOpen(false)} />}
               <UIOverlay />
             </div>
