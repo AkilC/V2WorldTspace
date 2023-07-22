@@ -93,7 +93,7 @@ const ThirdPersonCamera = ({ characterRef, joystickData }) => {
         makeDefault
         aspect={window.innerWidth / window.innerHeight}
         fov={75}
-        near={0.1}
+        near={0.05}
         far={1000}
         onUpdate={setDefaultCamera}
       />

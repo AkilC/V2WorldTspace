@@ -9,6 +9,7 @@ import { useNavigate} from 'react-router-dom';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {DoubleSide} from 'three';
 import { VideoTexture, MeshBasicMaterial, PlaneGeometry, Mesh } from 'three';
+import ChatCylinder from '../tspace_components/components/ChatCylinder';
 
 
 const Background = () => {
@@ -75,6 +76,11 @@ const Listen = ({ characterRef }) => {
         scale={[2, 2, 2]}
       />
       <Background/>
+      <ChatCylinder x={-15} y={0} z={40} />
+      <ChatCylinder x={15} y={0} z={40} />
+      <ChatCylinder x={15} y={0} z={-3} />
+      <ChatCylinder x={-15} y={0} z={-3} />
+      <ChatCylinder x={0} y={0} z={15} />
     </>
   );
 };
