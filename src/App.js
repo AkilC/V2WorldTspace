@@ -60,11 +60,9 @@ const App = () => {
             <div className="app-container">
               {is3D ? (
                 <Canvas gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
-                  <Suspense fallback={null}> {/* Use Suspense for async loading */}
                     <ScenesHandler characterRef={characterRef} />
                     <ThirdPersonCamera characterRef={characterRef} joystickData={joystickData}/>
                     <Multiplayer />
-                  </Suspense>
                 </Canvas>
               ) : (
                 <ScenesHandler2D /> // Your 2D view outside of Canvas

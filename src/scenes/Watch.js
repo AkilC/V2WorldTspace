@@ -1,15 +1,9 @@
 import React, { useRef, useState, useContext } from 'react';
 import { Stars } from '@react-three/drei';
 import { useThree, useLoader} from '@react-three/fiber';
-import Model from '../assets/EnterPortal';
-import V2Portal from '../tspace_components/portals/V2Portal';
-import BelovedPortal from '../tspace_components/portals/BelovedPortal';
 import { WorldContext } from '../tspace_components/contexts/WorldContext';
 import { useNavigate} from 'react-router-dom';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import {DoubleSide} from 'three';
-import * as THREE from 'three';
-import { VideoTexture, MeshBasicMaterial, PlaneGeometry, Mesh } from 'three';
+import { GLTFLoader, DoubleSide, VideoTexture, MeshBasicMaterial, PlaneGeometry, Mesh } from 'three';
 import ChatCylinder from '../tspace_components/components/ChatCylinder';
 
 const Background = () => {
@@ -24,7 +18,6 @@ const Background = () => {
 
 const Watch = ({ characterRef }) => {
   const navigate = useNavigate();
-  /* const [world, setWorld] = useState(null); */
   const world = useContext(WorldContext);
   const { scene } = useThree();
 
@@ -32,13 +25,9 @@ const Watch = ({ characterRef }) => {
   const video = document.createElement('video');
   // Set the source to your video file (make sure the path is correct)
   video.src = process.env.PUBLIC_URL + '/assets/v2Video.mp4'; // replace with your file path
-
   video.muted = true; // mute the video
-  
-  // The video should loop
-  video.loop = true;
-  // Start playing the video
-  video.play();
+  video.loop = true; // The video should loop
+  video.play(); // Start playing the video
 
   // Create a video texture
   const videoTexture = new VideoTexture(video);
@@ -91,6 +80,20 @@ const Watch = ({ characterRef }) => {
       <ChatCylinder x={10} y={0} z={8} />
       <ChatCylinder x={20} y={0} z={8} />
       <Background/>
+      <mesh
+        geometry={videoScreenGeometry}
+        material={videoMaterial}
+        position={[0, 7, 30]}
+        rotation={[0, Math.PI, 0]}
+        scale={[1.8, 1.8, 1.8]}
+        onClick={() => {
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
+          }
+        }}
+      />
     </>
   );
 };
