@@ -129,7 +129,7 @@ const Hub = ({ characterRef }) => {
       <directionalLight
           castShadow
           position={[5, 126, 112]}
-          intensity={3}
+          intensity={1}
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
           shadow-camera-far={50}
