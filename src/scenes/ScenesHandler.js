@@ -40,4 +40,4 @@ const ScenesHandler = ({ characterRef }) => {
   );
 };
 
-export default React.memo(ScenesHandler);
+export default ScenesHandler;

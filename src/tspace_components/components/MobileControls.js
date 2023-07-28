@@ -26,8 +26,10 @@ const MobileJoystick = () => {
       };
 
       const onEnd = (evt, data) => {
-        console.log('Joystick end');
-        localStorage.setItem('joystickData', null);
+        setTimeout(() => {
+          localStorage.setItem('joystickData', null);
+          console.log('Joystick end');
+        }, 20);
       };
 
       const onMove = throttle((evt, data) => {
