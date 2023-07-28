@@ -27,6 +27,7 @@ const Watch = ({ characterRef }) => {
   video.src = process.env.PUBLIC_URL + '/assets/v2Video.mp4'; // replace with your file path
   video.muted = true; // mute the video
   video.loop = true; // The video should loop
+  video.playsInline = true;
   video.play(); // Start playing the video
 
   // Create a video texture

@@ -1,12 +1,10 @@
-// good but causing problems
 import React, { useEffect, useState, useRef } from 'react';
 import nipplejs from 'nipplejs';
-import { useCallback } from 'react';
 import { throttle } from 'lodash';
 
-const MobileJoystick = ({ onJoystickMove }) => {
+const MobileJoystick = () => {
   const [joystickManager, setJoystickManager] = useState(null);
-  const containerRef = useRef(); // Add this line to create a container ref
+  const containerRef = useRef();
 
   useEffect(() => {
     if (containerRef.current) {
@@ -29,11 +27,14 @@ const MobileJoystick = ({ onJoystickMove }) => {
 
       const onEnd = (evt, data) => {
         console.log('Joystick end');
-        onJoystickMove(null); // Set joystickData to null when the joystick is released
+        localStorage.setItem('joystickData', null);
       };
 
       const onMove = throttle((evt, data) => {
-        onJoystickMove(data);
+        const angle = data.angle.radian;
+        const force = data.force;
+        localStorage.setItem('joystickData', JSON.stringify({ angle, force }));
+        console.log(data);
       }, 20);
 
       joystickManager.on('start', onStart);
@@ -46,9 +47,8 @@ const MobileJoystick = ({ onJoystickMove }) => {
         joystickManager.off('move', onMove);
       };
     }
-  }, [joystickManager, onJoystickMove]);
+  }, [joystickManager]);
 
-  // Return the container div as the component output
   return <div ref={containerRef} className="joystick-container"></div>;
 };
 

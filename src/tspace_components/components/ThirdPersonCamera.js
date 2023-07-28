@@ -6,10 +6,10 @@ import { useCharacterControls } from './useCharacterControls';
 import * as THREE from 'three';
 import { useSocket } from '../contexts/SocketContext';
 
-
-const ThirdPersonCamera = ({ characterRef, joystickData }) => {
+const ThirdPersonCamera = ({ characterRef }) => {
   const { setDefaultCamera } = useThree();
   const cameraRef = useRef();
+  const [joystickData, setJoystickData] = useState(null);
 
   const { room } = useSocket();
 
@@ -18,6 +18,17 @@ const ThirdPersonCamera = ({ characterRef, joystickData }) => {
 
     room.send('playerUpdate', characterData);
   };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const joystickDataStorage = localStorage.getItem('joystickData');
+      if (joystickDataStorage) {
+        setJoystickData(JSON.parse(joystickDataStorage));
+      }
+    }, 10); // Polls localStorage every 100ms
+  
+    return () => clearInterval(intervalId); // Clears interval on unmount
+  }, []);
 
   const { animation, cameraAngle, setCameraAngle, up, down, left, right } = useCharacterControls(
     characterRef,

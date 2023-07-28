@@ -1,4 +1,3 @@
-// Mobile Controls - Good but causing issues
 import React, { useState, useRef, useMemo, useContext, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
@@ -30,18 +29,6 @@ const App = () => {
   const key = useMemo(() => location.pathname, [location]);
   const [is3D, setIs3D] = useState(true);
 
-  const [joystickData, setJoystickData] = useState(null);
-
-  const handleJoystickMove = (data) => {
-    if (data === null) {
-      setJoystickData(null);
-    } else {
-      const angle = data.angle.radian;
-      const force = data.force;
-      setJoystickData({ angle, force });
-    }
-  };
-
   const handleIconClick = (iconName) => {
     if (iconName === 'thlarge') {
       setIsOverlayOpen(!isOverlayOpen);
@@ -59,23 +46,19 @@ const App = () => {
           <WorldContextProvider>
             <div className="app-container">
               {is3D ? (
-                <Canvas gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
+                <>
+                  <Canvas gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
                     <ScenesHandler characterRef={characterRef} />
-                    <ThirdPersonCamera characterRef={characterRef} joystickData={joystickData}/>
+                    <ThirdPersonCamera characterRef={characterRef} />
                     <Multiplayer />
-                </Canvas>
+                  </Canvas>
+                  <MobileJoystick />
+                </>
               ) : (
                 <ScenesHandler2D /> // Your 2D view outside of Canvas
               )}
               {isLoading && <Loading onLoadComplete={() => setIsLoading(false)} />}
-              {/* {showWelcomeScreen && <WelcomeScreen onEnter={() => setShowWelcomeScreen(false)} />} */}
-              <MobileJoystick onJoystickMove={(data) => handleJoystickMove(data)} />
               {is3D && <Nav3D />}
-              {/* <div className="icon-container">
-                <IconButton icon={faCog} onClick={() => handleIconClick('cog')} />
-                <IconButton icon={faUser} onClick={() => handleIconClick('user')} />
-                <IconButton icon={faThLarge} onClick={() => handleIconClick('thlarge')} />
-              </div> */}
               {isOverlayOpen && <Overlay onClose={() => setIsOverlayOpen(false)} />}
               <UIOverlay />
             </div>

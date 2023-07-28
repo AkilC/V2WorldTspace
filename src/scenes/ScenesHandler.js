@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Route, Routes, useLocation, Outlet } from "react-router-dom";
 import Hub from "./Hub";
 import Watch from "./Watch";
@@ -40,4 +40,4 @@ const ScenesHandler = ({ characterRef }) => {
   );
 };
 
-export default ScenesHandler;
+export default React.memo(ScenesHandler);
