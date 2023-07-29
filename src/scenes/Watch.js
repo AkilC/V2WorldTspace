@@ -5,6 +5,7 @@ import { WorldContext } from '../tspace_components/contexts/WorldContext';
 import { useNavigate} from 'react-router-dom';
 import { GLTFLoader, DoubleSide, VideoTexture, MeshBasicMaterial, PlaneGeometry, Mesh } from 'three';
 import ChatCylinder from '../tspace_components/components/ChatCylinder';
+import RoutePortal from '../tspace_components/portals/RoutePortal';
 
 const Background = () => {
   const { gl } = useThree();
@@ -71,6 +72,13 @@ const Watch = ({ characterRef }) => {
           castShadow
           position={[0, 2, 50]}
           intensity={1}
+        />
+        <RoutePortal
+          world={world}
+          characterRef={characterRef}
+          position={[0, 0, -10]}
+          size={[3, 3, 3]}
+          destination="/"
         />
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 100]}>
           <planeBufferGeometry attach="geometry" args={[300, 300]} />

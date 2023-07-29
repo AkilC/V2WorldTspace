@@ -144,9 +144,9 @@ const Hub = ({ characterRef }) => {
         {/* <CustomPixelationEffect pixelSize={4.0} /> */}
         {/* Other passes */}
       {/* </EffectComposer> */}
-      <Effects>
+      {/* <Effects>
         <renderPixelatedPass args={[resolution, 1, scene, camera]} />
-      </Effects>
+      </Effects> */}
       <Stars/>
     </>
   );

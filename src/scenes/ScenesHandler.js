@@ -1,12 +1,19 @@
-import React, { useEffect, useMemo } from "react";
-import { Route, Routes, useLocation, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes} from "react-router-dom";
 import Hub from "./Hub";
 import Watch from "./Watch";
 import Listen from "./Listen";
 import { WorldContext } from '../tspace_components/contexts/WorldContext';
 
+const Scene = ({ characterRef, element }) => {
+  const { cleanup } = React.useContext(WorldContext);
+  useEffect(() => {
+    return () => cleanup(); // call cleanup when the scene is unmounted
+  }, [cleanup]);
+  return element;
+};
+
 const ScenesHandler = ({ characterRef }) => {
-  const location = useLocation();
   const { isWorldInitialized, initializeWorld } = React.useContext(WorldContext);
 
   useEffect(() => {
@@ -22,17 +29,17 @@ const ScenesHandler = ({ characterRef }) => {
           <Route
             key="Hub"
             path="/"
-            element={<Hub characterRef={characterRef}/>}
+            element={<Scene characterRef={characterRef} element={<Hub characterRef={characterRef}/>} />}
           />
           <Route
             key="Watch"
             path="/Watch"
-            element={<Watch characterRef={characterRef} />}
+            element={<Scene characterRef={characterRef} element={<Watch characterRef={characterRef}/>} />}
           />
           <Route
             key="Listen"
             path="/Listen"
-            element={<Listen characterRef={characterRef} />}
+            element={<Scene characterRef={characterRef} element={<Listen characterRef={characterRef}/>} />}
           />
         </Routes>
       )}
