@@ -47,7 +47,7 @@ const Loading = ({ onLoadComplete }) => {
         color: 'white',
         opacity: opacity, // Set the opacity
         transition: 'opacity 0.9s ease', // Add a transition for the opacity
-        zIndex: '100'
+        zIndex: '1000000'
       }}
     >
       <img

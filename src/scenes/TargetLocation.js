@@ -73,7 +73,7 @@ const TargetLocation = ({ characterRef, position, onReached }) => {
     return (
       <>
         <mesh position={position} material={sphereMaterialRef.current}>
-          <sphereBufferGeometry args={[0.5, 32, 32]} />
+          <sphereBufferGeometry args={[0.25, 32, 32]} />
         </mesh>
       </>
     );

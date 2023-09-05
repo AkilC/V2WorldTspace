@@ -1,4 +1,3 @@
-// ✅
 const { Room } = require('colyseus');
 const defaultPlayerData = {
   position: { x: 0, y: 0, z: 0 },
@@ -9,25 +8,54 @@ class MyRoom extends Room {
   onCreate(options) {
     this.players = {};
     this.domain = options.domain;
-    this.roomId = this.roomId + '_' + this.domain; // Append the domain to the room ID
+    this.roomId = options.roomId;
 
-    console.log('Room created:', this.roomId);
+    console.log('Room created for domain:', this.domain);
+
+    this.video = {
+      currentTime: 0,
+      isPlaying: false,
+    };
+
+    this.audio = {
+      currentTime: 0,
+      isPlaying: false,
+      loopCount: 0
+    };
 
     this.onMessage('playerUpdate', (client, message) => {
-      /* console.log('Broadcasting player update:', client.sessionId, message); */
       this.players[client.sessionId] = message;
       this.broadcast('playerUpdate', { id: client.sessionId, ...message }, { except: client });
     });
+    
+    this.onMessage('videoUpdate', (client, message) => {
+      if (message.videoState.isPlaying) {
+        this.video = message.videoState;
+      }
+      console.log("Updated server video state:", this.video);
+      this.broadcast('videoUpdate', this.video);
+    });
+
+    this.onMessage('audioUpdate', (client, message) => {
+    if (message.audioState.loopCount > this.audio.loopCount || 
+        (message.audioState.loopCount === this.audio.loopCount && 
+         message.audioState.currentTime > this.audio.currentTime)) {
+      this.audio = message.audioState;
+    }
+    console.log("Updated server audio state:", this.audio);
+    this.broadcast('audioUpdate', this.audio);
+  });
   }
-  
 
   onJoin(client) {
     console.log("Broadcasting player join:", client.sessionId, defaultPlayerData);
     this.players[client.sessionId] = defaultPlayerData;
     this.broadcast('playerJoin', { id: client.sessionId, ...defaultPlayerData });
-  
-    // Send the current list of players to the newly joined player
+
     client.send('playerList', this.players);
+    console.log("Sending initial video state to new client", this.video);
+    client.send('videoUpdate', this.video);
+    client.send('audioUpdate', this.audio);
   }
 
   onLeave(client) {

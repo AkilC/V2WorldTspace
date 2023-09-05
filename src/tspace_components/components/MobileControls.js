@@ -11,7 +11,7 @@ const MobileJoystick = () => {
       const manager = nipplejs.create({
         zone: containerRef.current,
         mode: 'static',
-        position: { left: '42px', top: '56px' },
+        position: { left: '24px', top: '72px' },
         size: 100,
         color: 'white',
       });

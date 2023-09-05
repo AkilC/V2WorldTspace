@@ -19,6 +19,10 @@ import { UIOverlayContext, UIOverlayContextProvider } from './tspace_components/
 import UIOverlay from './tspace_components/components/UIOverlay';
 import ScenesHandler2D from './tspace_components/2D/ScenesHandler2D';
 import Nav3D from './tspace_components/components/Nav3D';
+import { VideoStateProvider } from './tspace_components/contexts/VideoStateContext';
+import VideoPlayerOverlay from './tspace_components/components/VideoPlayerOverlay';
+import { AudioStateProvider } from './tspace_components/contexts/AudioStateContext';
+import AudioPlayerOverlay from './tspace_components/components/AudioPlayerOverlay';
 
 const App = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -41,9 +45,11 @@ const App = () => {
 
   return (
     <UIOverlayContextProvider>
+    <VideoStateProvider>
+    <AudioStateProvider>
     <LiveKitProvider>
-      <SocketProvider>
-          <WorldContextProvider>
+    <SocketProvider>
+    <WorldContextProvider>
             <div className="app-container">
               {is3D ? (
                 <>
@@ -53,18 +59,22 @@ const App = () => {
                     <Multiplayer />
                   </Canvas>
                   <MobileJoystick />
+                  <VideoPlayerOverlay/>
+                  <AudioPlayerOverlay/>
                 </>
               ) : (
-                <ScenesHandler2D /> // Your 2D view outside of Canvas
+                <ScenesHandler2D />
               )}
               {isLoading && <Loading onLoadComplete={() => setIsLoading(false)} />}
               {is3D && <Nav3D />}
               {isOverlayOpen && <Overlay onClose={() => setIsOverlayOpen(false)} />}
               <UIOverlay />
             </div>
-          </WorldContextProvider>
-      </SocketProvider>
+    </WorldContextProvider>
+    </SocketProvider>
     </LiveKitProvider>
+    </AudioStateProvider>
+    </VideoStateProvider>
     </UIOverlayContextProvider>
   );
 };

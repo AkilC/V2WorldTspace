@@ -23,7 +23,7 @@ const MobileNav = () => {
 };
 
 const DesktopNav = () => {
-  const navItems = ['Watch', 'Listen', 'Talk', 'Shop'];
+  const navItems = ['Watch', 'Listen', 'Shop'];
   const navigate = useNavigate();
   const [is3D, setIs3D] = useState(true);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -61,7 +61,7 @@ const DesktopNav = () => {
 };
 
 const SideDrawer = ({ onClose }) => {
-  const navItems = ['Watch', 'Listen', 'Talk', 'Shop'];
+  const navItems = ['Watch', 'Listen', 'Shop'];
   const navigate = useNavigate();
 
   return (
@@ -139,6 +139,7 @@ const styles = {
     fontWeight: 'bold', 
     fontSize: '16px', 
     cursor: 'pointer',
+    textTransform: 'uppercase'
   },
   logo: {
     height: '64px', 

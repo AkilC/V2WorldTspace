@@ -1,108 +1,188 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { Stars } from '@react-three/drei';
-import { useThree, useLoader} from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { WorldContext } from '../tspace_components/contexts/WorldContext';
-import { useNavigate} from 'react-router-dom';
-import { GLTFLoader, DoubleSide, VideoTexture, MeshBasicMaterial, PlaneGeometry, Mesh } from 'three';
-import ChatCylinder from '../tspace_components/components/ChatCylinder';
-import RoutePortal from '../tspace_components/portals/RoutePortal';
+import { VideoStateContext } from '../tspace_components/contexts/VideoStateContext';
+import { DoubleSide, MeshBasicMaterial, PlaneGeometry, Mesh, VideoTexture } from 'three';
+import { useSocket } from '../tspace_components/contexts/SocketContext';
 
 const Background = () => {
   const { gl } = useThree();
-  
-  React.useEffect(() => {
+  useEffect(() => {
     gl.setClearColor('black');
   }, [gl]);
-  
   return null;
 };
 
 const Watch = ({ characterRef }) => {
-  const navigate = useNavigate();
-  const world = useContext(WorldContext);
-  const { scene } = useThree();
+  const { room } = useSocket();
+  const { videoState, setVideoState, isLocallyPaused, setIsLocallyPaused } = useContext(VideoStateContext);
 
-  // Create a video element
-  const video = document.createElement('video');
-  // Set the source to your video file (make sure the path is correct)
-  video.src = process.env.PUBLIC_URL + '/assets/v2Video.mp4'; // replace with your file path
-  video.muted = true; // mute the video
-  video.loop = true; // The video should loop
-  video.playsInline = true;
-  video.play(); // Start playing the video
+  const videoRef = useRef(null);
+  const [videoTexture, setVideoTexture] = useState(null);
+  const [metadataLoaded, setMetadataLoaded] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+  const [shouldSyncImmediately, setShouldSyncImmediately] = useState(false);
 
-  // Create a video texture
-  const videoTexture = new VideoTexture(video);
 
-  // Create a basic material with the video texture
-  const videoMaterial = new MeshBasicMaterial({ map: videoTexture });
-  videoMaterial.side = DoubleSide;
+  useEffect(() => {
+    if (room) {  // <-- Add this check
+      room.onLeave(() => {
+        setIsConnected(false);
+      });
+  
+      room.onJoin(() => {
+        setIsConnected(true);
+      });
+    }
+  }, [room]);
 
-  // Create a plane geometry for the video screen
-  const videoScreenGeometry = new PlaneGeometry(16, 9); // dimensions can be adjusted
 
-  // Create a mesh for the video screen
-  const videoScreen = new Mesh(videoScreenGeometry, videoMaterial);
+  useEffect(() => {
+    if (!videoRef.current) {
+      videoRef.current = document.createElement('video');
+      videoRef.current.src = process.env.PUBLIC_URL + '/assets/v2Video.mp4';
+      videoRef.current.muted = true;
+      videoRef.current.loop = true;
+      videoRef.current.playsInline = true;
+    }
+  }, []);
 
-  // Position the video screen in the scene
-  videoScreen.position.set(0, 7, 30); // position can be adjusted
-  videoScreen.rotation.set(0, Math.PI, 0);
-  videoScreen.scale.set(1.8, 1.8, 1.8); // scale can be adjusted
+  useEffect(() => {
+    if (!videoRef.current) return;
 
-  // Add the video screen to the scene
-  scene.add(videoScreen);
+    const video = videoRef.current;
+
+    const handleMetadataLoaded = () => {
+      setVideoState(prevState => ({ ...prevState, duration: video.duration }));
+      setMetadataLoaded(true);  // Set the flag here
+    };    
+
+    video.addEventListener('loadedmetadata', handleMetadataLoaded);
+
+    return () => {
+      video.removeEventListener('loadedmetadata', handleMetadataLoaded);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      setVideoTexture(new VideoTexture(videoRef.current));
+    }
+  }, [videoRef.current]);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    const video = videoRef.current;
+
+    const localTimeUpdateInterval = setInterval(() => {
+      setVideoState(prevState => ({ ...prevState, currentTime: video.currentTime }));
+    }, 1000);
+
+    return () => {
+      clearInterval(localTimeUpdateInterval);
+    };
+  }, []);
+
+  // This useEffect sets up the server sync and runs only once when the component mounts
+  useEffect(() => {
+    let syncInterval;
+    if (isConnected && room) {
+      syncInterval = setInterval(() => {
+        const video = videoRef.current;
+        console.log("Sending videoUpdate to server", { currentTime: video.currentTime, isPlaying: !video.paused });
+        room.send('videoUpdate', { videoState: { currentTime: video.currentTime, isPlaying: !video.paused } });
+      }, 10000);
+  
+      if (shouldSyncImmediately) {
+        const video = videoRef.current;
+        console.log("Immediate sync: Sending videoUpdate to server", { currentTime: video.currentTime, isPlaying: !video.paused });
+        room.send('videoUpdate', { videoState: { currentTime: video.currentTime, isPlaying: !video.paused } });
+        setShouldSyncImmediately(false);
+      }
+    }
+  
+    return () => {
+      clearInterval(syncInterval);
+    };
+  }, [isConnected, room, shouldSyncImmediately]);
+  
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    const video = videoRef.current;
+    const tolerance = 0.5;
+  
+    if (isLocallyPaused) {  // Add this check
+      video.pause();
+    } else {
+      video.play();
+      if (Math.abs(video.currentTime - videoState.currentTime) > tolerance) {
+        video.currentTime = videoState.currentTime;
+      }
+    }
+  }, [videoState, isLocallyPaused]);
+
+
+  useEffect(() => {
+    if (room) {  // <-- Add this check
+      room.onMessage('videoUpdate', (message) => {
+        console.log("Receiving videoUpdate from server", message);
+        if (metadataLoaded) {  // Check the flag here
+          setVideoState(prevState => ({ ...prevState, ...message, duration: prevState.duration }));
+        }
+      });
+    }
+  }, [room, metadataLoaded]);
+  
+  //cleanup
+  useEffect(() => {
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
+  const videoMaterial = videoTexture ? new MeshBasicMaterial({ map: videoTexture }) : null;
+  const videoScreenGeometry = new PlaneGeometry(16, 9);
 
   return (
     <>
-        <Stars/>
-        <ambientLight intensity={1} />
-        <directionalLight
-          castShadow
-          position={[0, 10, -5]}
-          intensity={1}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-        <directionalLight
-          castShadow
-          position={[0, 2, 50]}
-          intensity={1}
-        />
-        <RoutePortal
-          world={world}
-          characterRef={characterRef}
-          position={[0, 0, -10]}
-          size={[3, 3, 3]}
-          destination="/"
-        />
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 100]}>
-          <planeBufferGeometry attach="geometry" args={[300, 300]} />
-          <meshStandardMaterial attach="material" color={'#808080'} />
-      </mesh>
-      <ChatCylinder x={-0} y={0} z={8} />
-      <ChatCylinder x={-10} y={0} z={8} />
-      <ChatCylinder x={10} y={0} z={8} />
-      <ChatCylinder x={20} y={0} z={8} />
-      <Background/>
-      <mesh
-        geometry={videoScreenGeometry}
-        material={videoMaterial}
-        position={[0, 7, 30]}
-        rotation={[0, Math.PI, 0]}
-        scale={[1.8, 1.8, 1.8]}
-        onClick={() => {
-          if (video.paused) {
-            video.play();
-          } else {
-            video.pause();
-          }
-        }}
+      <Stars />
+      <ambientLight intensity={1} />
+      <directionalLight
+        castShadow
+        position={[0, 10, -5]}
+        intensity={1}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
       />
+      <directionalLight
+        castShadow
+        position={[0, 2, 50]}
+        intensity={1}
+      />
+      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 100]}>
+        <planeBufferGeometry attach="geometry" args={[300, 300]} />
+        <meshStandardMaterial attach="material" color={'#808080'} />
+      </mesh>
+      <Background />
+      {videoMaterial && (
+        <mesh
+          geometry={videoScreenGeometry}
+          material={videoMaterial}
+          position={[0, 7, 30]}
+          rotation={[0, Math.PI, 0]}
+          scale={[1.8, 1.8, 1.8]}
+        />
+      )}
     </>
   );
 };

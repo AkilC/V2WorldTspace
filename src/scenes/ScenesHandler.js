@@ -14,17 +14,17 @@ const Scene = ({ characterRef, element }) => {
 };
 
 const ScenesHandler = ({ characterRef }) => {
-  const { isWorldInitialized, initializeWorld } = React.useContext(WorldContext);
+  /* const { isWorldInitialized, initializeWorld } = React.useContext(WorldContext);
 
   useEffect(() => {
     if (!isWorldInitialized) {
       initializeWorld();
     }
-  }, [isWorldInitialized, initializeWorld]);
+  }, [isWorldInitialized, initializeWorld]); */
 
   return (
     <>
-      {isWorldInitialized && (
+      {/* {isWorldInitialized && ( */}
         <Routes>
           <Route
             key="Hub"
@@ -42,7 +42,7 @@ const ScenesHandler = ({ characterRef }) => {
             element={<Scene characterRef={characterRef} element={<Listen characterRef={characterRef}/>} />}
           />
         </Routes>
-      )}
+      {/* )} */}
     </>
   );
 };

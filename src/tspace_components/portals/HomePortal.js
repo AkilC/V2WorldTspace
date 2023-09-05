@@ -261,16 +261,6 @@ const V2Portal = ({
   }, [destination, world, position, rotation, onCharacterEnter]);
 
   useFrame((state) => {
-    // Render the background scene to the render target
-    /* state.gl.setRenderTarget(portalRenderTarget);
-
-    updateFillQuadTransform(fillQuadMeshRef.current);
-
-    backgroundCamera.position.copy(state.camera.position);
-    backgroundCamera.rotation.copy(state.camera.rotation);
-    state.gl.render(backgroundScene, backgroundCamera);
-
-    state.gl.setRenderTarget(null); */
 
     if (rippleMaterial.current) {
       rippleMaterial.current.uniforms.time.value = state.clock.getElapsedTime();
