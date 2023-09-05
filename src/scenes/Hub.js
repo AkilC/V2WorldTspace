@@ -103,7 +103,7 @@ const Hub = ({ characterRef }) => {
   return (
     <>
       {myScene && <primitive object={myScene} />}
-      <HomePortal
+      {/* <HomePortal
         world={world}
         characterRef={characterRef}
         position={[0, 0, -10]}
@@ -116,7 +116,7 @@ const Hub = ({ characterRef }) => {
             console.error('Destination not found:', destination);
           }
         }}
-      />
+      /> */}
       <TargetLocation
         characterRef={characterRef}
         position={[0, 2, 6]}
