@@ -12,7 +12,7 @@ const UIOverlay = () => {
       return null;
     }
 
-    const options = ['Watch', 'Listen', 'Talk','Shop'];
+    const options = ['Watch', 'Listen','Shop'];
 
     const navigateTo = (path) => {
       closeUI();

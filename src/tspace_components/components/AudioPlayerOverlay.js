@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAudioState } from '../contexts/AudioStateContext';
 
@@ -6,40 +6,51 @@ const AudioPlayerOverlay = () => {
   const location = useLocation();
   const { audioState, isLocallyPaused, setIsLocallyPaused, setShouldSyncImmediately } = useAudioState();
   const { currentTime, duration } = audioState;
+  const [awaitingSync, setAwaitingSync] = useState(false);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [smoothCurrentTime, setSmoothCurrentTime] = useState(currentTime);
-  const [awaitingSync, setAwaitingSync] = useState(false);
+  const mobileAudioRef = useRef(null);
+  const [mobileIsPaused, setMobileIsPaused] = useState(true); // Separate state for mobile
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     window.addEventListener('resize', handleResize);
-    
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   useEffect(() => {
-    let animationFrameId;
-    
-    const updateSmoothCurrentTime = () => {
-      setSmoothCurrentTime(prevTime => {
-        const newTime = prevTime + (currentTime - prevTime) * 0.1;
-        return newTime;
-      });
-      
-      animationFrameId = requestAnimationFrame(updateSmoothCurrentTime);
-    };
-    
-    updateSmoothCurrentTime();
-    
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [currentTime]);
+    if (isMobile) {
+      mobileAudioRef.current = new Audio(process.env.PUBLIC_URL + '/assets/biggertheneverything.mp3');
+    }
+  }, [isMobile]);
 
+  const handlePlayPause = () => {
+    if (isMobile) {
+      if (mobileAudioRef.current.paused) {
+        mobileAudioRef.current.play().catch(error => console.log("Play error:", error));
+        setMobileIsPaused(false); // Update mobile state
+      } else {
+        mobileAudioRef.current.pause();
+        setMobileIsPaused(true); // Update mobile state
+      }
+    } else {
+      setIsLocallyPaused(!isLocallyPaused);
+      if (isLocallyPaused) {
+        setShouldSyncImmediately(true);
+        setAwaitingSync(true);
+      }
+    }
+  };
+
+  if (location.pathname !== '/Listen') {
+    return null;
+  }
 
   const overlayStyle = isMobile
     ? { right: '16px', left: 'auto', bottom: '42px' }
@@ -47,12 +58,10 @@ const AudioPlayerOverlay = () => {
 
   const progressBarWidth = isMobile ? '84px' : '128px';
 
-  if (location.pathname !== '/Listen') {
-    return null;
-  }
-
   const playIconPath = `${process.env.PUBLIC_URL}/assets/playIcon.svg`;
   const pauseIconPath = `${process.env.PUBLIC_URL}/assets/pauseIcon.svg`;
+
+  const showPlayIcon = isMobile ? mobileIsPaused : isLocallyPaused;
 
   return (
     <div style={{
@@ -65,7 +74,6 @@ const AudioPlayerOverlay = () => {
       zIndex: 1000,
       ...overlayStyle
     }}>
-      {/* You can put an album cover or other relevant image here */}
       <img
         src={`${process.env.PUBLIC_URL}/assets/V2Artwork.png`}
         alt="Audio Thumbnail"
@@ -105,17 +113,11 @@ const AudioPlayerOverlay = () => {
           width: '32px',
           height: '32px',
         }}
-        onClick={() => {
-          setIsLocallyPaused(!isLocallyPaused);
-          if (isLocallyPaused) {
-            setShouldSyncImmediately(true);
-            setAwaitingSync(true);
-          }
-        }}
+        onClick={handlePlayPause}
       >
         <img
-          src={isLocallyPaused ? playIconPath : pauseIconPath}
-          alt={isLocallyPaused ? 'Play' : 'Pause'}
+          src={showPlayIcon ? playIconPath : pauseIconPath}
+          alt={showPlayIcon ? 'Play' : 'Pause'}
           style={{ width: '32px', height: '32px' }}
         />
       </button>

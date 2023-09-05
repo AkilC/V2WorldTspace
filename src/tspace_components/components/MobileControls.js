@@ -13,7 +13,7 @@ const MobileJoystick = () => {
         mode: 'static',
         position: { left: '24px', top: '72px' },
         size: 100,
-        color: 'white',
+        color: 'gray',
       });
       setJoystickManager(manager);
     }

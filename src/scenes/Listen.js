@@ -34,8 +34,10 @@ const Listen = ({ characterRef }) => {
       audioRef.current.addEventListener('loadedmetadata', () => {
         setAudioState(prevState => ({ ...prevState, duration: audioRef.current.duration }));
         setMetadataLoaded(true);
+        audioRef.current.play().catch(error => console.log("Play error:", error));
       });
       audioRef.current.load();
+      console.log(audioRef);
     }
   }, []);
 
