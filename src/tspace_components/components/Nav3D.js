@@ -23,7 +23,7 @@ const MobileNav = () => {
 };
 
 const DesktopNav = () => {
-  const navItems = ['Watch', 'Listen', 'Shop'];
+  const navItems = ['Watch', 'Listen', 'Gallery', 'Shop'];
   const navigate = useNavigate();
   const [is3D, setIs3D] = useState(true);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
