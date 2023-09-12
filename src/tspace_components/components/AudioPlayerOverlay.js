@@ -10,8 +10,9 @@ const AudioPlayerOverlay = () => {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const mobileAudioRef = useRef(null);
-  const [mobileIsPaused, setMobileIsPaused] = useState(true); // Separate state for mobile
-
+  const [mobileIsPaused, setMobileIsPaused] = useState(true);
+  const [smoothCurrentTime, setSmoothCurrentTime] = useState(currentTime); // Added for smooth progress bar update
+  
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -25,28 +26,21 @@ const AudioPlayerOverlay = () => {
   }, []);
 
   useEffect(() => {
-    if (isMobile) {
-      mobileAudioRef.current = new Audio(process.env.PUBLIC_URL + '/assets/biggertheneverything.mp3');
-    }
-  }, [isMobile]);
-
-  const handlePlayPause = () => {
-    if (isMobile) {
-      if (mobileAudioRef.current.paused) {
-        mobileAudioRef.current.play().catch(error => console.log("Play error:", error));
-        setMobileIsPaused(false); // Update mobile state
-      } else {
-        mobileAudioRef.current.pause();
-        setMobileIsPaused(true); // Update mobile state
-      }
-    } else {
-      setIsLocallyPaused(!isLocallyPaused);
-      if (isLocallyPaused) {
-        setShouldSyncImmediately(true);
-        setAwaitingSync(true);
-      }
-    }
-  };
+    let animationFrameId;
+    
+    const updateSmoothCurrentTime = () => {
+      setSmoothCurrentTime(prevTime => {
+        const newTime = prevTime + (currentTime - prevTime) * 0.1;
+        return newTime;
+      });
+      
+      animationFrameId = requestAnimationFrame(updateSmoothCurrentTime);
+    };
+    
+    updateSmoothCurrentTime();
+    
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [currentTime]); // Added this effect for smooth progress bar update
 
   if (location.pathname !== '/Listen') {
     return null;
@@ -95,7 +89,7 @@ const AudioPlayerOverlay = () => {
             position: 'relative'
           }}>
             <div style={{
-              width: `${(currentTime / duration) * 100}%`,
+              width: `${(smoothCurrentTime / duration) * 100}%`,
               height: '100%',
               backgroundColor: '#6a6a6a',
               borderRadius: '6px'
@@ -113,7 +107,14 @@ const AudioPlayerOverlay = () => {
           width: '32px',
           height: '32px',
         }}
-        onClick={handlePlayPause}
+        onClick={() => {
+            setIsLocallyPaused(!isLocallyPaused);
+            if (isLocallyPaused) {
+              setShouldSyncImmediately(true);
+              console.log("Sync Boolean", setShouldSyncImmediately);
+              setAwaitingSync(true);  // Set the flag here
+            }
+        }}
       >
         <img
           src={showPlayIcon ? playIconPath : pauseIconPath}

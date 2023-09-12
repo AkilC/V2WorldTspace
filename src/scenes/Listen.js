@@ -17,144 +17,117 @@ const Background = () => {
 };
 
 const Listen = ({ characterRef }) => {
-  const world = useContext(WorldContext);
   const { room } = useSocket();
-  const { audioState, setAudioState, isLocallyPaused, setIsLocallyPaused, shouldSyncImmediately, setShouldSyncImmediately } = useContext(AudioStateContext);
+  const { audioState, setAudioState, isLocallyPaused, setIsLocallyPaused, awaitingSync, setShouldSyncImmediately, shouldSyncImmediately, setAwaitingSync } = useContext(AudioStateContext);
+
   const audioRef = useRef(null);
-
   const [metadataLoaded, setMetadataLoaded] = useState(false);
-  const [loopCount, setLoopCount] = useState(0);
-  const [awaitingSync, setAwaitingSync] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+
+  // 1. Setup audioRef
+useEffect(() => {
+  if (!audioRef.current) {
+    audioRef.current = new Audio(process.env.PUBLIC_URL + '/assets/biggertheneverything.mp3');
+    audioRef.current.loop = true;
+    audioRef.current.load();
+  }
+}, []);
 
 
-  useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(process.env.PUBLIC_URL + '/assets/biggertheneverything.mp3');
-      audioRef.current.loop = true;
-      audioRef.current.addEventListener('loadedmetadata', () => {
-        setAudioState(prevState => ({ ...prevState, duration: audioRef.current.duration }));
-        setMetadataLoaded(true);
-        audioRef.current.play().catch(error => console.log("Play error:", error));
-      });
-      audioRef.current.load();
-      console.log(audioRef);
-    }
-  }, []);
+useEffect(() => {
+  if (!audioRef.current) return;
 
-  useEffect(() => {
-    if (!audioRef.current) return;
-    
-    const handleLoop = () => {
-      setLoopCount(prevCount => prevCount + 1);
-      const audio = audioRef.current;
-      room.send('audioUpdate', { audioState: { currentTime: 0, isPlaying: !audio.paused, loopCount: loopCount + 1 } });
-    };
-    
-    audioRef.current.addEventListener('ended', handleLoop);
-    
-    return () => {
-      audioRef.current.removeEventListener('ended', handleLoop);
-    };
-  }, [room, loopCount]);
+  const audio = audioRef.current;
+  const handleMetadataLoaded = () => {
+    console.log('Inside loadedmetadata:', audioRef.current.duration);
+    setAudioState(prevState => ({ ...prevState, duration: audio.duration }));
+    setMetadataLoaded(true);
 
-  useEffect(() => {
-    if (!audioRef.current) return;
-
-    const audio = audioRef.current;
-    const handleTimeUpdate = () => {
-      setAudioState(prevState => ({ ...prevState, currentTime: audio.currentTime }));
-    };
-
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-
-    return () => {
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-  
-    const audio = audioRef.current;
-  
-    // Check if the room (server) is available
     if (room) {
-      // Existing code for syncing with the server
-      if (shouldSyncImmediately) {
-        // Skip updates when shouldSyncImmediately is true, as this is handled elsewhere
-        return;
-      }
-  
-      if (isLocallyPaused) {
-        audio.pause();
-      } else {
-        if (audioState.currentTime > audio.currentTime) {
-          audio.currentTime = audioState.currentTime;
-        }
-        audio.play();
-      }
-    } else {
-      // If the room (server) is not available, play the audio locally
-      if (!isLocallyPaused) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
+      room.send('audioDuration', { duration: audio.duration });
     }
-  }, [audioState, isLocallyPaused, shouldSyncImmediately, room]);
-  
-  
+  };
+  audio.addEventListener('loadedmetadata', handleMetadataLoaded);
+  return () => {
+    audio.removeEventListener('loadedmetadata', handleMetadataLoaded);
+  };
+}, []);
 
+  // 2. Set up the message handlers
+  useEffect(() => {
+    if (room) {
+      room.onMessage('audioUpdate', (message) => {
+        console.log("Receiving audioUpdate from server", message);
+        if (metadataLoaded) {
+          setAudioState(prevState => ({ ...prevState, ...message, duration: prevState.duration }));
+          if (awaitingSync) {
+            audioRef.current.play();
+            setAwaitingSync(false);
+          }
+        }
+      });
+    }
+  }, [room, metadataLoaded]);
+
+  // 3. Setup join/leave handlers
+  useEffect(() => {
+    if (room) {
+      room.onLeave(() => {
+        setIsConnected(false);
+      });
+      room.onJoin(() => {
+        setIsConnected(true);
+        setShouldSyncImmediately(true);
+      });
+    }
+  }, [room]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    const localTimeUpdateInterval = setInterval(() => {
+      setAudioState(prevState => ({ ...prevState, currentTime: audioRef.current.currentTime }));
+    }, 1000);
+    return () => {
+      clearInterval(localTimeUpdateInterval);
+    };
+  }, []);
+
+  // Server sync setup
   useEffect(() => {
     let syncInterval;
-    if (room) {
+    if (isConnected && room) {
       syncInterval = setInterval(() => {
         const audio = audioRef.current;
-        room.send('audioUpdate', { audioState: { currentTime: audio.currentTime, isPlaying: !audio.paused, loopCount: loopCount } });
+        console.log("Sending audioUpdate to server", { currentTime: audio.currentTime });
+        room.send('audioUpdate', { audioState: { currentTime: audio.currentTime } });
       }, 10000);
+      if (shouldSyncImmediately) {
+        console.log("Sync Running...");
+        const audio = audioRef.current;
+        console.log("Immediate sync: Sending audioUpdate to server", { currentTime: audio.currentTime });
+        room.send('audioUpdate', { audioState: { currentTime: audio.currentTime } });
+        setShouldSyncImmediately(false);
+      }
     }
-
     return () => {
       clearInterval(syncInterval);
     };
-  }, [room, shouldSyncImmediately, loopCount]);
+  }, [isConnected, room, shouldSyncImmediately]);
 
   useEffect(() => {
-    if (shouldSyncImmediately && room) {
-      const audio = audioRef.current;
-      console.log(shouldSyncImmediately);
-      room.send('audioUpdate', { audioState: { currentTime: audio.currentTime, isPlaying: !audio.paused, loopCount: loopCount } });
-      setShouldSyncImmediately(false);
-    }
-  }, [shouldSyncImmediately, room, loopCount]);
-  
-
-  useEffect(() => {
-    if (!room) return;
-    console.log("sync:", shouldSyncImmediately)
-  
-    room.onMessage('audioUpdate', (message) => {
-      if (metadataLoaded) {
-        console.log("message.currentTime", message.currentTime, "audioRef.current.currentTime", audioRef.current.currentTime)
-        if (message.currentTime > audioRef.current.currentTime) {
-          audioRef.current.currentTime = message.currentTime + 0.2;
-        } else if (shouldSyncImmediately) {
-          audioRef.current.currentTime = message.currentTime -.2; // or some other offset value
-          setShouldSyncImmediately(false);
-        }
-    
-        if (awaitingSync) {  // Check the flag here
-          audioRef.current.play();
-          setAwaitingSync(false);  // Reset the flag
-          console.log("sync:", shouldSyncImmediately)
-        } else if (!shouldSyncImmediately) {
-          message.isPlaying ? audioRef.current.play() : audioRef.current.pause();
-        }
+    if (!audioRef.current) return;
+    const tolerance = 0.5;
+    if (isLocallyPaused) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+      if (Math.abs(audioRef.current.currentTime - audioState.currentTime) > tolerance) {
+        audioRef.current.currentTime = audioState.currentTime;
       }
-    });
-    
-  }, [room, metadataLoaded, shouldSyncImmediately]);  // Add shouldSyncImmediately to dependency list
-  
+    }
+  }, [audioState, isLocallyPaused]);
+
+  // Cleanup
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -163,8 +136,8 @@ const Listen = ({ characterRef }) => {
       }
     };
   }, []);
-  
 
+  
   const pavillion = useLoader(GLTFLoader, process.env.PUBLIC_URL + '/assets/scenes/listenScene.glb');
   const pavillionMesh = pavillion.nodes.Cube;
   pavillionMesh.material.side = DoubleSide;
@@ -202,11 +175,11 @@ const Listen = ({ characterRef }) => {
         scale={[2, 2, 2]}
       />
       <Background />
-      <ChatCylinder x={-15} y={0} z={40} />
+      {/* <ChatCylinder x={-15} y={0} z={40} />
       <ChatCylinder x={15} y={0} z={40} />
       <ChatCylinder x={15} y={0} z={-3} />
       <ChatCylinder x={-15} y={0} z={-3} />
-      <ChatCylinder x={0} y={0} z={15} />
+      <ChatCylinder x={0} y={0} z={15} /> */}
     </>
   );
 };

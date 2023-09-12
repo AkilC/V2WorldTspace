@@ -1,3 +1,4 @@
+// working v0
 import React, { createContext, useContext, useState } from 'react';
 
 export const VideoStateContext = createContext();
@@ -10,6 +11,7 @@ export const VideoStateProvider = ({ children }) => {
     const [videoState, setVideoState] = useState({ currentTime: 0, duration: 0, isPlaying: true });
     const [isLocallyPaused, setIsLocallyPaused] = useState(false);  // New state
     const [shouldSyncImmediately, setShouldSyncImmediately] = useState(false);
+    const [awaitingSync, setAwaitingSync] = useState(false);
 
     const value = {
       videoState,
@@ -17,7 +19,9 @@ export const VideoStateProvider = ({ children }) => {
       isLocallyPaused,  // New
       setIsLocallyPaused,  // New
       shouldSyncImmediately,  // New
-      setShouldSyncImmediately  // New
+      setShouldSyncImmediately,
+      awaitingSync,
+      setAwaitingSync
     };
   
     return (

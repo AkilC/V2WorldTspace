@@ -8,7 +8,7 @@ export const useAudioState = () => {
 
 export const AudioStateProvider = ({ children }) => {
   const [audioState, setAudioState] = useState({ currentTime: 0, duration: 0, isPlaying: true });
-  const [isLocallyPaused, setIsLocallyPaused] = useState(false);
+  const [isLocallyPaused, setIsLocallyPaused] = useState(true);
   const [shouldSyncImmediately, setShouldSyncImmediately] = useState(false);
   const [awaitingSync, setAwaitingSync] = useState(false); // New state variable
 

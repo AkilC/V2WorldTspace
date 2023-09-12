@@ -16,28 +16,14 @@ const Background = () => {
 
 const Watch = ({ characterRef }) => {
   const { room } = useSocket();
-  const { videoState, setVideoState, isLocallyPaused, setIsLocallyPaused } = useContext(VideoStateContext);
+  const { videoState, setVideoState, isLocallyPaused, setIsLocallyPaused, awaitingSync, setShouldSyncImmediately, shouldSyncImmediately, setAwaitingSync } = useContext(VideoStateContext);
 
   const videoRef = useRef(null);
   const [videoTexture, setVideoTexture] = useState(null);
   const [metadataLoaded, setMetadataLoaded] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
-  const [shouldSyncImmediately, setShouldSyncImmediately] = useState(false);
 
-
-  useEffect(() => {
-    if (room) {  // <-- Add this check
-      room.onLeave(() => {
-        setIsConnected(false);
-      });
-  
-      room.onJoin(() => {
-        setIsConnected(true);
-      });
-    }
-  }, [room]);
-
-
+  // 1. Setup videoRef and associated video events
   useEffect(() => {
     if (!videoRef.current) {
       videoRef.current = document.createElement('video');
@@ -52,14 +38,15 @@ const Watch = ({ characterRef }) => {
     if (!videoRef.current) return;
 
     const video = videoRef.current;
-
     const handleMetadataLoaded = () => {
       setVideoState(prevState => ({ ...prevState, duration: video.duration }));
-      setMetadataLoaded(true);  // Set the flag here
-    };    
+      setMetadataLoaded(true);
 
+      if (room) {
+        room.send('videoDuration', { duration: video.duration });
+      }
+    };
     video.addEventListener('loadedmetadata', handleMetadataLoaded);
-
     return () => {
       video.removeEventListener('loadedmetadata', handleMetadataLoaded);
     };
@@ -71,49 +58,73 @@ const Watch = ({ characterRef }) => {
     }
   }, [videoRef.current]);
 
+  // 2. Set up the message handlers
+  useEffect(() => {
+    if (room) {
+      room.onMessage('videoUpdate', (message) => {
+        console.log("Receiving videoUpdate from server", message);
+        if (metadataLoaded) {
+          setVideoState(prevState => ({ ...prevState, ...message, duration: prevState.duration }));
+          if (awaitingSync) {
+            videoRef.current.play();
+            setAwaitingSync(false);
+          }
+        }
+      });
+    }
+  }, [room, metadataLoaded]);
+
+  // 3. Setup join/leave handlers
+  useEffect(() => {
+    if (room) {
+      room.onLeave(() => {
+        setIsConnected(false);
+      });
+      room.onJoin(() => {
+        setIsConnected(true);
+        setShouldSyncImmediately(true);
+      });
+    }
+  }, [room]);
+
   useEffect(() => {
     if (!videoRef.current) return;
     const video = videoRef.current;
-
     const localTimeUpdateInterval = setInterval(() => {
       setVideoState(prevState => ({ ...prevState, currentTime: video.currentTime }));
     }, 1000);
-
     return () => {
       clearInterval(localTimeUpdateInterval);
     };
   }, []);
 
-  // This useEffect sets up the server sync and runs only once when the component mounts
+  // Server sync setup
   useEffect(() => {
     let syncInterval;
     if (isConnected && room) {
       syncInterval = setInterval(() => {
         const video = videoRef.current;
-        console.log("Sending videoUpdate to server", { currentTime: video.currentTime, isPlaying: !video.paused });
-        room.send('videoUpdate', { videoState: { currentTime: video.currentTime, isPlaying: !video.paused } });
+        console.log("Sending videoUpdate to server", { currentTime: video.currentTime });
+        room.send('videoUpdate', { videoState: { currentTime: video.currentTime } });
       }, 10000);
-  
       if (shouldSyncImmediately) {
+        console.log("Sync Running...");
         const video = videoRef.current;
-        console.log("Immediate sync: Sending videoUpdate to server", { currentTime: video.currentTime, isPlaying: !video.paused });
-        room.send('videoUpdate', { videoState: { currentTime: video.currentTime, isPlaying: !video.paused } });
+        console.log("Immediate sync: Sending videoUpdate to server", { currentTime: video.currentTime });
+        room.send('videoUpdate', { videoState: { currentTime: video.currentTime } });
         setShouldSyncImmediately(false);
       }
     }
-  
     return () => {
       clearInterval(syncInterval);
     };
   }, [isConnected, room, shouldSyncImmediately]);
-  
 
   useEffect(() => {
     if (!videoRef.current) return;
     const video = videoRef.current;
     const tolerance = 0.5;
-  
-    if (isLocallyPaused) {  // Add this check
+    if (isLocallyPaused) {
       video.pause();
     } else {
       video.play();
@@ -123,19 +134,7 @@ const Watch = ({ characterRef }) => {
     }
   }, [videoState, isLocallyPaused]);
 
-
-  useEffect(() => {
-    if (room) {  // <-- Add this check
-      room.onMessage('videoUpdate', (message) => {
-        console.log("Receiving videoUpdate from server", message);
-        if (metadataLoaded) {  // Check the flag here
-          setVideoState(prevState => ({ ...prevState, ...message, duration: prevState.duration }));
-        }
-      });
-    }
-  }, [room, metadataLoaded]);
-  
-  //cleanup
+  // Cleanup
   useEffect(() => {
     return () => {
       if (videoRef.current) {

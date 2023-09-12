@@ -1,10 +1,11 @@
+// Working v0
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useVideoState } from '../contexts/VideoStateContext';
 
 const VideoPlayerOverlay = () => {
   const location = useLocation();
-  const { videoState, isLocallyPaused, setIsLocallyPaused, setShouldSyncImmediately } = useVideoState();
+  const { videoState, isLocallyPaused, setIsLocallyPaused, setShouldSyncImmediately, awaitingSync, setAwaitingSync } = useVideoState();
   const { currentTime, duration } = videoState;
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -103,10 +104,12 @@ const VideoPlayerOverlay = () => {
           height: '32px',
         }}
         onClick={() => {
-          setIsLocallyPaused(!isLocallyPaused);
-          if (isLocallyPaused) {
-            setShouldSyncImmediately(true);
-          }
+            setIsLocallyPaused(!isLocallyPaused);
+            if (isLocallyPaused) {
+              setShouldSyncImmediately(true);
+              console.log("Sync Boolean", setShouldSyncImmediately);
+              setAwaitingSync(true);  // Set the flag here
+            }
         }}
       >
         <img
