@@ -9,17 +9,15 @@ const AudioPlayerOverlay = () => {
   const [awaitingSync, setAwaitingSync] = useState(false);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const mobileAudioRef = useRef(null);
-  const [mobileIsPaused, setMobileIsPaused] = useState(true);
-  const [smoothCurrentTime, setSmoothCurrentTime] = useState(currentTime); // Added for smooth progress bar update
-  
+  const [smoothCurrentTime, setSmoothCurrentTime] = useState(currentTime);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
+    
     window.addEventListener('resize', handleResize);
-
+    
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -40,11 +38,7 @@ const AudioPlayerOverlay = () => {
     updateSmoothCurrentTime();
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [currentTime]); // Added this effect for smooth progress bar update
-
-  if (location.pathname !== '/Listen') {
-    return null;
-  }
+  }, [currentTime]);
 
   const overlayStyle = isMobile
     ? { right: '16px', left: 'auto', bottom: '42px' }
@@ -55,8 +49,6 @@ const AudioPlayerOverlay = () => {
   const playIconPath = `${process.env.PUBLIC_URL}/assets/playIcon.svg`;
   const pauseIconPath = `${process.env.PUBLIC_URL}/assets/pauseIcon.svg`;
 
-  const showPlayIcon = isMobile ? mobileIsPaused : isLocallyPaused;
-
   return (
     <div style={{
       position: 'fixed',
@@ -65,7 +57,7 @@ const AudioPlayerOverlay = () => {
       padding: '16px',
       borderRadius: '12px',
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      zIndex: 1000,
+      zIndex: 4000,
       ...overlayStyle
     }}>
       <img
@@ -117,8 +109,8 @@ const AudioPlayerOverlay = () => {
         }}
       >
         <img
-          src={showPlayIcon ? playIconPath : pauseIconPath}
-          alt={showPlayIcon ? 'Play' : 'Pause'}
+          src={isLocallyPaused ? playIconPath : pauseIconPath}
+          alt={isLocallyPaused ? 'Play' : 'Pause'}
           style={{ width: '32px', height: '32px' }}
         />
       </button>
