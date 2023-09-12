@@ -58,9 +58,9 @@ const App = () => {
                     <ThirdPersonCamera characterRef={characterRef} />
                     <Multiplayer />
                   </Canvas>
+                  {location.pathname === '/Listen' && <AudioPlayerOverlay />}
                   <MobileJoystick />
                   <VideoPlayerOverlay/>
-                  <AudioPlayerOverlay/>
                 </>
               ) : (
                 <ScenesHandler2D />
