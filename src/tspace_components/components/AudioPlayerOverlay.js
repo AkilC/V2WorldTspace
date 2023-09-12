@@ -9,15 +9,17 @@ const AudioPlayerOverlay = () => {
   const [awaitingSync, setAwaitingSync] = useState(false);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [smoothCurrentTime, setSmoothCurrentTime] = useState(currentTime);
-
+  const mobileAudioRef = useRef(null);
+  const [mobileIsPaused, setMobileIsPaused] = useState(true);
+  const [smoothCurrentTime, setSmoothCurrentTime] = useState(currentTime); // Added for smooth progress bar update
+  
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     window.addEventListener('resize', handleResize);
-    
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -38,7 +40,11 @@ const AudioPlayerOverlay = () => {
     updateSmoothCurrentTime();
     
     return () => cancelAnimationFrame(animationFrameId);
-  }, [currentTime]);
+  }, [currentTime]); // Added this effect for smooth progress bar update
+
+  if (location.pathname !== '/Listen') {
+    return null;
+  }
 
   const overlayStyle = isMobile
     ? { right: '16px', left: 'auto', bottom: '42px' }
@@ -49,6 +55,8 @@ const AudioPlayerOverlay = () => {
   const playIconPath = `${process.env.PUBLIC_URL}/assets/playIcon.svg`;
   const pauseIconPath = `${process.env.PUBLIC_URL}/assets/pauseIcon.svg`;
 
+  const showPlayIcon = isMobile ? mobileIsPaused : isLocallyPaused;
+
   return (
     <div style={{
       position: 'fixed',
@@ -57,7 +65,7 @@ const AudioPlayerOverlay = () => {
       padding: '16px',
       borderRadius: '12px',
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      zIndex: 4000,
+      zIndex: 1000,
       ...overlayStyle
     }}>
       <img
