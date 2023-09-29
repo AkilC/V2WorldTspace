@@ -10,7 +10,7 @@ import ThirdPersonCamera from './tspace_components/components/ThirdPersonCamera'
 import { SocketProvider } from './tspace_components/contexts/SocketContext';
 import Multiplayer from './tspace_components/components/Multiplayer';
 import { LiveKitProvider } from './tspace_components/contexts/LiveKitContext';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, } from 'react-router-dom';
 import ScenesHandler from './scenes/ScenesHandler';
 import WorldContextProvider from './tspace_components/contexts/WorldContext';
 import MobileJoystick from './tspace_components/components/MobileControls';
@@ -23,6 +23,7 @@ import { VideoStateProvider } from './tspace_components/contexts/VideoStateConte
 import VideoPlayerOverlay from './tspace_components/components/VideoPlayerOverlay';
 import { AudioStateProvider } from './tspace_components/contexts/AudioStateContext';
 import AudioPlayerOverlay from './tspace_components/components/AudioPlayerOverlay';
+import Register from './tspace_components/components/Register';
 
 const App = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -43,38 +44,43 @@ const App = () => {
     }
   };
 
+  console.log("sup bitches");
+
   return (
     <UIOverlayContextProvider>
-    <VideoStateProvider>
-    <AudioStateProvider>
-    <LiveKitProvider>
-    <SocketProvider>
-    <WorldContextProvider>
-            <div className="app-container">
-              {is3D ? (
-                <>
-                  <Canvas gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
-                    <ScenesHandler characterRef={characterRef} />
-                    <ThirdPersonCamera characterRef={characterRef} />
-                    <Multiplayer />
-                  </Canvas>
-                  {location.pathname === '/Listen' && <AudioPlayerOverlay />}
-                  <MobileJoystick />
-                  <VideoPlayerOverlay/>
-                </>
-              ) : (
-                <ScenesHandler2D />
-              )}
-              {isLoading && <Loading onLoadComplete={() => setIsLoading(false)} />}
-              {is3D && <Nav3D />}
-              {isOverlayOpen && <Overlay onClose={() => setIsOverlayOpen(false)} />}
-              <UIOverlay />
-            </div>
-    </WorldContextProvider>
-    </SocketProvider>
-    </LiveKitProvider>
-    </AudioStateProvider>
-    </VideoStateProvider>
+      <VideoStateProvider>
+        <AudioStateProvider>
+          <LiveKitProvider>
+            <SocketProvider>
+              <WorldContextProvider>
+                <div className="app-container">
+                  {is3D ? (
+                    <>
+                      <Canvas gl={{ stencil: true }} key={key} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
+                        <ScenesHandler characterRef={characterRef} />
+                        <ThirdPersonCamera characterRef={characterRef} />
+                        <Multiplayer />
+                      </Canvas>
+                      {location.pathname === '/Listen' && <AudioPlayerOverlay />}
+                      <MobileJoystick />
+                      <VideoPlayerOverlay />
+                    </>
+                  ) : (
+                    <ScenesHandler2D />
+                  )}
+                  {isLoading && <Loading onLoadComplete={() => setIsLoading(false)} />}
+                  {is3D && <Nav3D />}
+                  {/* {isOverlayOpen && <Overlay onClose={() => setIsOverlayOpen(false)} />} */}
+                  {/* <UIOverlay /> */}
+                  <Routes>
+                    <Route path="/register" element={<Register />} />
+                  </Routes>
+                </div>
+              </WorldContextProvider>
+            </SocketProvider>
+          </LiveKitProvider>
+        </AudioStateProvider>
+      </VideoStateProvider>
     </UIOverlayContextProvider>
   );
 };

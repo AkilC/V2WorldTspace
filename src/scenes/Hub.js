@@ -117,14 +117,14 @@ const Hub = ({ characterRef }) => {
           }
         }}
       /> */}
-      <TargetLocation
+      {/* <TargetLocation
         characterRef={characterRef}
         position={[0, 2, 6]}
         onReached={() => {
           console.log('The character has reached the target!');
           // any other logic you would like to add when the target is reached
         }}
-      />
+      /> */}
 {/*       <ambientLight intensity={1} /> */}
       <directionalLight
           castShadow
@@ -144,9 +144,9 @@ const Hub = ({ characterRef }) => {
         {/* <CustomPixelationEffect pixelSize={4.0} /> */}
         {/* Other passes */}
       {/* </EffectComposer> */}
-      {/* <Effects>
+      <Effects>
         <renderPixelatedPass args={[resolution, 1, scene, camera]} />
-      </Effects> */}
+      </Effects>
       <Stars/>
     </>
   );
