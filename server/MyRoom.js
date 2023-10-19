@@ -1,9 +1,14 @@
 const { Room } = require('colyseus');
+const jwt = require('jsonwebtoken');
+const pool = require('./database');
 
 const defaultPlayerData = {
   position: { x: 0, y: 0, z: 0 },
   rotation: 0,
+  color: "#f5f5f5f",
+  userId: null    // Default userId is set to null
 };
+
 
 class MyRoom extends Room {
   onCreate(options) {
@@ -27,9 +32,17 @@ class MyRoom extends Room {
     };
 
     this.onMessage('playerUpdate', (client, message) => {
-      this.players[client.sessionId] = message;
+      this.players[client.sessionId] = {
+          ...this.players[client.sessionId],
+          ...message
+      };
       this.broadcast('playerUpdate', { id: client.sessionId, ...message }, { except: client });
     });
+
+    this.onMessage('readyForPlayerList', (client) => {
+      console.log("Client ready for playerList", this.players);
+      client.send('playerList', this.players);
+   });
 
     this.onMessage('videoUpdate', (client, message) => {
       this.video.currentTime = this.calculateVideoCurrentTime();
@@ -70,21 +83,59 @@ class MyRoom extends Room {
     return currentTime;
   }
 
-  onJoin(client) {
-    console.log("Broadcasting player join:", client.sessionId, defaultPlayerData);
-    this.players[client.sessionId] = defaultPlayerData;
-    this.broadcast('playerJoin', { id: client.sessionId, ...defaultPlayerData });
+  async onJoin(client, options) {
+      let userId = null;
+      let userColor = null;
 
-    client.send('playerList', this.players);
-    console.log("Sending initial video and audio states to new client");
-    client.send('videoUpdate', this.video);
-    client.send('audioUpdate', this.audio);
+      const token = options.token;  // Assume the client sends the token as part of the options
+
+      if (token) {
+          try {
+              const decoded = jwt.verify(token, 'your_jwt_secret');  // Use the same secret as in your Express server
+              userId = decoded.id;
+
+              // Fetch the user's color from the database
+              userColor = await this.getUserColor(userId);
+          } catch (error) {
+              console.error("Error decoding the JWT token:", error);
+          }
+      }
+
+      const playerData = {
+          ...defaultPlayerData,
+          color: userColor || defaultPlayerData.color,
+          userId: userId
+      };
+
+      console.log("Broadcasting player join:", client.sessionId, playerData);
+      this.players[client.sessionId] = playerData;
+      this.broadcast('playerJoin', { id: client.sessionId, ...playerData });
+
+      /* client.send('playerList', this.players);
+      console.log("Player list:", this.players); */
+      console.log("Sending initial video and audio states to new client");
+      client.send('videoUpdate', this.video);
+      client.send('audioUpdate', this.audio);
   }
-
   onLeave(client) {
     console.log('Client left:', client.id);
     delete this.players[client.sessionId];
     this.broadcast('playerLeave', client.sessionId);
+  }
+
+  async getUserColor(userId) {
+    try {
+      const userColor = await pool.query('SELECT color FROM avatar_attributes WHERE user_id = $1', [userId]);
+
+      if (userColor.rows.length > 0) {
+        return userColor.rows[0].color;
+      } else {
+        return null;  // Return null if no color set for this user
+      }
+    } catch (err) {
+      console.error(err.message);
+      return null;  // Return null on error
+    }
   }
 }
 

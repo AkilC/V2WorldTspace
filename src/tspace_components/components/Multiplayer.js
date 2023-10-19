@@ -17,9 +17,29 @@ const Multiplayer = () => {
         setPlayers((players) => ({ ...players, [playerData.id]: playerData }));
       });
 
-    room.onMessage('playerUpdate', (playerData) => {
-      setPlayers((players) => ({ ...players, [playerData.id]: playerData }));
+    room.onMessage('playerList', (playerList) => {
+      console.log('Received playerList:', playerList);
+      setPlayers(playerList);
     });
+
+    room.onMessage('playerUpdate', (playerData) => {
+      setPlayers((prevPlayers) => {
+        // Check if the incoming data is different from the current state
+        if (JSON.stringify(prevPlayers[playerData.id]) !== JSON.stringify(playerData)) {
+          return {
+            ...prevPlayers,
+            [playerData.id]: {
+              ...prevPlayers[playerData.id],
+              ...playerData
+            }
+          };
+        }
+        // If no changes, return the previous state to avoid re-render
+        return prevPlayers;
+      });
+      /* console.log("Received playerUpdate for:", playerData.id, playerData); */
+    });
+
 
     room.onMessage('playerLeave', (playerId) => {
       setPlayers((players) => {
@@ -29,6 +49,8 @@ const Multiplayer = () => {
         return newPlayers;
       });
     });
+
+    room.send('readyForPlayerList');
 
   }, [room]);
 
@@ -46,12 +68,15 @@ const Multiplayer = () => {
                 playerData.position.y * 0.98,
                 playerData.position.z * 0.98,
             ];
+
+            
             return (
                 <OtherPlayer
                   key={id}
                   position={interpolatedPosition}
                   quaternion={remoteCharacterQuaternion}
                   animation={playerData.animation}
+                  color={playerData.color || "#5F5F5F"}
                 />
               );
         })}

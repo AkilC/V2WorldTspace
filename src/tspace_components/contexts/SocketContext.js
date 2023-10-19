@@ -23,9 +23,10 @@ export const SocketProvider = ({ children }) => {
       if (!client) return;
   
       const domain = window.location.hostname;
+      const token = localStorage.getItem('token');  // Fetch the JWT token from localStorage
   
       try {
-        const room = await client.joinOrCreate('my_room', { domain });
+        const room = await client.joinOrCreate('my_room', { domain, token });  // Send the JWT token here
         setRoom(room);
       } catch (error) {
         console.error(error);

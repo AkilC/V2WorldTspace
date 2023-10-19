@@ -3,14 +3,15 @@ import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import {WorldContext} from '../contexts/WorldContext';
+import { AvatarContext } from '../contexts/AvatarContext'; // Adjust the path accordingly
 import { Body, World, Plane as CannonPlane } from 'cannon-es';
-
 
 const Character = React.forwardRef(({ animation, ...props }, ref) => {
   const groupRef = useRef();
   const { scene, animations } = useGLTF(`${process.env.PUBLIC_URL}/assets/centeredCharacter.gltf`);
   const [mixer, setMixer] = useState(null);
   const { world, isWorldInitialized } = useContext(WorldContext);
+  const { avatarColor } = useContext(AvatarContext); // <-- Access the avatarColor from the context
 
   useEffect(() => {
     const mixerInstance = new THREE.AnimationMixer(scene);
@@ -35,7 +36,6 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
     }
 
     world.addBody(ref.current.body);
-    console.log(ref.current.body);
 
     const groundShape = new CannonPlane();
     const groundBody = new Body({ mass: 0 });
@@ -67,17 +67,19 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
     }
   });
 
-  const material = new THREE.MeshStandardMaterial({ color: 'red' });
+  useEffect(() => {
+    if (scene) {
+      scene.traverse(function (child) {
+        if (child.isMesh) {
+          child.material = new THREE.MeshStandardMaterial({ color: avatarColor });
+        }
+      });
+    }
+  }, [scene, avatarColor]); // <-- Added avatarColor as a dependency
 
   return (
-    <group ref={ref} {...props} scale={[0.35, 0.35, 0.35]} rotation={[0, Math.PI, 0]} position={[0, 2, 0]} dispose={null}>
-      <primitive object={scene} />
-      {scene.children.map((child, index) => {
-        if (child.isMesh) {
-          return <primitive key={index} object={child} material={material} />;
-        }
-        return null;
-      })}
+    <group ref={ref} {...props} scale={[0.35, 0.35, 0.35]} rotation={[0, Math.PI, 0]} position={[0, 0, 0]} dispose={null}>
+      <primitive object={scene} dispose={null} />
     </group>
   );
 });

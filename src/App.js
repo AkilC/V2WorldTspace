@@ -24,6 +24,9 @@ import VideoPlayerOverlay from './tspace_components/components/VideoPlayerOverla
 import { AudioStateProvider } from './tspace_components/contexts/AudioStateContext';
 import AudioPlayerOverlay from './tspace_components/components/AudioPlayerOverlay';
 import Register from './tspace_components/components/Register';
+import Login from './tspace_components/components/Login';
+import Profile from './tspace_components/components/Profile';
+import { AvatarProvider } from './tspace_components/contexts/AvatarContext';
 
 const App = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -51,6 +54,7 @@ const App = () => {
       <VideoStateProvider>
         <AudioStateProvider>
           <LiveKitProvider>
+            <AvatarProvider>
             <SocketProvider>
               <WorldContextProvider>
                 <div className="app-container">
@@ -74,10 +78,13 @@ const App = () => {
                   {/* <UIOverlay /> */}
                   <Routes>
                     <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/profile" element={<Profile />} />
                   </Routes>
                 </div>
               </WorldContextProvider>
             </SocketProvider>
+            </AvatarProvider>
           </LiveKitProvider>
         </AudioStateProvider>
       </VideoStateProvider>
