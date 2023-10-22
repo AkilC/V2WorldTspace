@@ -3,6 +3,7 @@ import { Route, Routes} from "react-router-dom";
 import Hub from "./Hub";
 import Watch from "./Watch";
 import Listen from "./Listen";
+import Gallery from "./Gallery";
 import { WorldContext } from '../tspace_components/contexts/WorldContext';
 
 const Scene = ({ characterRef, element }) => {
@@ -40,6 +41,11 @@ const ScenesHandler = ({ characterRef }) => {
             key="Listen"
             path="/Listen"
             element={<Scene characterRef={characterRef} element={<Listen characterRef={characterRef}/>} />}
+          />
+          <Route
+            key="Gallery"
+            path="/Gallery"
+            element={<Scene characterRef={characterRef} element={<Gallery characterRef={characterRef}/>} />}
           />
         </Routes>
       {/* )} */}

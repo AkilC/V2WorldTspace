@@ -50,7 +50,7 @@ const Listen = ({ characterRef }) => {
       <primitive
         object={pavillion.scene}
         receiveShadow
-        position={[0, 0, 15]}
+        position={[0, -.3, 15]}
         rotation={[0, 0, 0]}
         scale={[2, 2, 2]}
       />
