@@ -109,7 +109,7 @@ const createRippleMaterial = () => {
   return new THREE.ShaderMaterial(materialProperties);
 };
 
-const planeTexture = new THREE.TextureLoader().load(process.env.PUBLIC_URL + '/assets/UI/GALLERY2.png');
+const planeTexture = new THREE.TextureLoader().load(process.env.PUBLIC_URL + '/assets/UI/Gallery2.png');
 
 const usePortalModel = (position, rotation, size, scene, rippleMaterial) => {
   const portalModel = useLoader(GLTFLoader, process.env.PUBLIC_URL + '/assets/Portal.gltf');
