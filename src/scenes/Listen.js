@@ -43,14 +43,14 @@ const Listen = ({ characterRef }) => {
         position={[0, 2, 50]}
         intensity={1}
       />
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 100]}>
+      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.6, 100]}>
         <planeBufferGeometry attach="geometry" args={[300, 300]} />
         <meshStandardMaterial attach="material" color={'#808080'} />
       </mesh>
       <primitive
         object={pavillion.scene}
         receiveShadow
-        position={[0, 0, 15]}
+        position={[0, -.4, 15]}
         rotation={[0, 0, 0]}
         scale={[2, 2, 2]}
       />

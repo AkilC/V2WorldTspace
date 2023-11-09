@@ -3,7 +3,10 @@ import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { ObjectLoader } from 'three';
 import { useThree, extend } from '@react-three/fiber';
 import V2Portal from '../tspace_components/portals/V2Portal';
-import HomePortal from '../tspace_components/portals/HomePortal';
+import WatchPortal from '../tspace_components/portals/WatchPortal';
+import ListenPortal from '../tspace_components/portals/ListenPortal';
+import GalleryPortal from '../tspace_components/portals/GalleryPortal';
+import ShopPortal from '../tspace_components/portals/ShopPortal';
 import { Body, World, Plane as CannonPlane } from 'cannon-es';
 import { useFrame } from '@react-three/fiber';
 import { useNavigate, Outlet} from 'react-router-dom';
@@ -32,6 +35,7 @@ const Background = () => {
 const Hub = ({ characterRef }) => {
   const [myScene, setMyScene] = useState(null);
   const navigate = useNavigate();
+  const [pavillion, setPavillion] = useState(null);
   /* const [world, setWorld] = useState(null); */
   const world = useContext(WorldContext);
   /* const characterRef = useRef(); */
@@ -41,16 +45,21 @@ const Hub = ({ characterRef }) => {
   const resolution = useMemo(() => new THREE.Vector2(size.width, size.height), [size]);
 
   useEffect(() => {
-    console.log('TestScene mounted');
   
     const loader = new GLTFLoader();
     loader.load(`${process.env.PUBLIC_URL}/assets/scenes/v2environment.glb`, (gltf) => {
       setMyScene(gltf.scene);
     });
   
-    return () => {
-      console.log('TestScene unmounted');
-    };
+    // Load the pavillion model
+    loader.load(`${process.env.PUBLIC_URL}/assets/pavillion.gltf`, (gltf) => {
+        gltf.scene.traverse((child) => {
+            if (child.isMesh) {
+                child.material.side = THREE.DoubleSide;
+            }
+        });
+        setPavillion(gltf.scene);
+    });
   }, []);
 
   /* useEffect(() => {
@@ -103,12 +112,12 @@ const Hub = ({ characterRef }) => {
   return (
     <>
       {myScene && <primitive object={myScene} />}
-      {/* <HomePortal
+      <WatchPortal
         world={world}
         characterRef={characterRef}
-        position={[0, 0, -10]}
-        size={[4, 4, 4]}
-        destination="triber.space"
+        position={[18, 0, 20]}
+        size={[3, 3, 3]}
+        destination="/Watch"
         onCharacterEnter={(destination) => {
           if (destination) {
             window.location.href = `https://${destination}`;
@@ -116,20 +125,63 @@ const Hub = ({ characterRef }) => {
             console.error('Destination not found:', destination);
           }
         }}
-      /> */}
-      <TargetLocation
+      />
+      <ListenPortal
+        world={world}
+        characterRef={characterRef}
+        position={[6, 0, 20]}
+        size={[3, 3, 3]}
+        destination="/Listen"
+        onCharacterEnter={(destination) => {
+          if (destination) {
+            window.location.href = `https://${destination}`;
+          } else {
+            console.error('Destination not found:', destination);
+          }
+        }}
+      />
+      <GalleryPortal
+        world={world}
+        characterRef={characterRef}
+        position={[-6, 0, 20]}
+        size={[3, 3, 3]}
+        destination="/Gallery"
+        onCharacterEnter={(destination) => {
+          if (destination) {
+            window.location.href = `https://${destination}`;
+          } else {
+            console.error('Destination not found:', destination);
+          }
+        }}
+      />
+      <ShopPortal
+        world={world}
+        characterRef={characterRef}
+        position={[-18, 0, 20]}
+        size={[3, 3, 3]}
+        destination="/Shop"
+        onCharacterEnter={(destination) => {
+          if (destination) {
+            window.location.href = `https://${destination}`;
+          } else {
+            console.error('Destination not found:', destination);
+          }
+        }}
+      />
+      {/* <TargetLocation
         characterRef={characterRef}
         position={[0, 2, 6]}
         onReached={() => {
           console.log('The character has reached the target!');
           // any other logic you would like to add when the target is reached
         }}
-      />
+      /> */}
 {/*       <ambientLight intensity={1} /> */}
+      {/* {pavillion && <primitive object={pavillion} position={[0, -0.7, 15]} scale={[5, 4, 3]} />} */}
       <directionalLight
           castShadow
-          position={[5, 126, 112]}
-          intensity={1}
+          position={[5, 126, -112]}
+          intensity={1.5}
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
           shadow-camera-far={50}
@@ -139,11 +191,10 @@ const Hub = ({ characterRef }) => {
           shadow-camera-bottom={-10}
         /> 
       <Background />
-      {/* Add the EffectComposer and Pixelation effect */}
-      {/* <EffectComposer> */}
-        {/* <CustomPixelationEffect pixelSize={4.0} /> */}
-        {/* Other passes */}
-      {/* </EffectComposer> */}
+      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 100]}>
+        <planeBufferGeometry attach="geometry" args={[800, 800]} />
+        <meshStandardMaterial attach="material" color={'#808080'} />
+      </mesh>
       {/* <Effects>
         <renderPixelatedPass args={[resolution, 1, scene, camera]} />
       </Effects> */}
@@ -153,4 +204,3 @@ const Hub = ({ characterRef }) => {
 };
 
 export default Hub;
-

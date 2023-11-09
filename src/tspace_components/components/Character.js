@@ -70,7 +70,7 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
   const material = new THREE.MeshStandardMaterial({ color: 'red' });
 
   return (
-    <group ref={ref} {...props} scale={[0.35, 0.35, 0.35]} rotation={[0, Math.PI, 0]} position={[0, 2, 0]} dispose={null}>
+    <group ref={ref} {...props} scale={[0.35, 0.35, 0.35]} rotation={[0, Math.PI, 0]} position={[0, 0, 0]} dispose={null}>
       <primitive object={scene} />
       {scene.children.map((child, index) => {
         if (child.isMesh) {
