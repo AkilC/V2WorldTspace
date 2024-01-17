@@ -1,12 +1,7 @@
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import { Stars } from '@react-three/drei';
 import { useThree, useLoader } from '@react-three/fiber';
-import { WorldContext } from '../tspace_components/contexts/WorldContext';
-import { AudioStateContext } from '../tspace_components/contexts/AudioStateContext';
-import { useSocket } from '../tspace_components/contexts/SocketContext';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DoubleSide } from 'three';
-import ChatCylinder from '../tspace_components/components/ChatCylinder';
 import * as THREE from 'three';
 
 const Background = () => {
@@ -28,10 +23,7 @@ const Gallery = ({ characterRef }) => {
                 child.material.map.needsUpdate = true;
             }
         });
-    }
-
-  /* const galleryMesh = gallery.nodes.Cube;
-  galleryMesh.material.side = DoubleSide; */
+  }
 
   return (
     <>

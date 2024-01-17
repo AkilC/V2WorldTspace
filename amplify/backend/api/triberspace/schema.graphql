@@ -1,0 +1,53 @@
+type Creator @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  World: World @hasOne
+  Store: Store @hasOne
+  name: String!
+}
+
+type Store @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Creator: Creator @belongsTo
+  Products: [Product] @hasMany(indexName: "byStore", fields: ["id"])
+  name: String
+}
+
+type Product @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  storeID: ID! @index(name: "byStore")
+  Store: Store @belongsTo(fields: ["storeID"])
+  itemName: String!
+}
+
+type World @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  Spaces: [Space] @hasMany(indexName: "byWorld", fields: ["id"])
+  Creator: Creator @belongsTo
+}
+
+type Space @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  wID: ID! @index(name: "byWorld")
+  World: World @belongsTo(fields: ["wID"])
+  Events: [Event] @hasMany(indexName: "bySpace", fields: ["id"])
+}
+
+type Event @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  type: String
+  spaceID: ID! @index(name: "bySpace")
+  Comments: [Comment] @hasMany(indexName: "byEvent", fields: ["id"])
+  World: World @hasOne
+  Space: Space @belongsTo(fields: ["spaceID"])
+}
+
+type Comment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  content: String!
+  eventID: ID! @index(name: "byEvent")
+  Event: Event @belongsTo(fields: ["eventID"])
+}
+ 

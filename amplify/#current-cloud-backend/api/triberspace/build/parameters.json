@@ -1,0 +1,13 @@
+{
+    "AppSyncApiName": "triberspace",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "S3DeploymentBucket": "amplify-triberspace-dev-144501-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/a00f3dba35824b36c20e517c202e5297edc8c6fe"
+}

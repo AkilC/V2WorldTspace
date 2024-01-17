@@ -37,17 +37,7 @@ const App = () => {
   const key = useMemo(() => location.pathname, [location]);
   const [is3D, setIs3D] = useState(true);
 
-  const handleIconClick = (iconName) => {
-    if (iconName === 'thlarge') {
-      setIsOverlayOpen(!isOverlayOpen);
-    } else if (iconName === 'cog') {
-      setIs3D(!is3D); // toggle between 3D and 2D
-    } else {
-      console.log(`Icon ${iconName} clicked.`);
-    }
-  };
-
-  console.log("sup bitches");
+  console.log("sup bitches - kyle");
 
   return (
     <UIOverlayContextProvider>
@@ -76,11 +66,6 @@ const App = () => {
                   {is3D && <Nav3D />}
                   {/* {isOverlayOpen && <Overlay onClose={() => setIsOverlayOpen(false)} />} */}
                   {/* <UIOverlay /> */}
-                  <Routes>
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/profile" element={<Profile />} />
-                  </Routes>
                 </div>
               </WorldContextProvider>
             </SocketProvider>

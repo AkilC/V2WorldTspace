@@ -1,0 +1,142 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-triberspace-dev-144501-authRole",
+      "UnauthRoleArn": "arn:aws:iam::323176902582:role/amplify-triberspace-dev-144501-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::323176902582:role/amplify-triberspace-dev-144501-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-triberspace-dev-144501-deployment",
+      "UnauthRoleName": "amplify-triberspace-dev-144501-unauthRole",
+      "StackName": "amplify-triberspace-dev-144501",
+      "StackId": "arn:aws:cloudformation:us-east-1:323176902582:stack/amplify-triberspace-dev-144501/16f6b2b0-a815-11ee-b582-0a9b6ab96a13",
+      "AmplifyAppId": "dvb0wv50ixfcp"
+    }
+  },
+  "api": {
+    "restAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "apiFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "output": {
+        "ApiName": "restAPI",
+        "RootUrl": "https://l4nx1ujfc5.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "l4nx1ujfc5"
+      },
+      "lastPushTimeStamp": "2024-01-17T01:49:43.155Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-triberspace-dev-144501-deployment/amplify-cfn-templates/api/restAPI-cloudformation-template.json",
+        "logicalId": "apirestAPI"
+      }
+    },
+    "triberspace": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            },
+            "authenticationType": "API_KEY"
+          }
+        },
+        "GraphQLAPIIdOutput": "4zu72oiknve2jajgqutmidnlkm",
+        "GraphQLAPIEndpointOutput": "https://gpwflulbubdedcx22p3jyw234e.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-dnz3w6lenvecrguzeeltdjge3a"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2024-01-17T01:49:43.157Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-triberspace-dev-144501-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apitriberspace"
+      }
+    }
+  },
+  "function": {
+    "apiFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::323176902582:role/triberspaceLambdaRoleaa4df846-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:323176902582:function:apiFunction-dev",
+        "Name": "apiFunction-dev",
+        "LambdaExecutionRole": "triberspaceLambdaRoleaa4df846-dev"
+      },
+      "lastPushTimeStamp": "2024-01-17T01:49:43.158Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-triberspace-dev-144501-deployment/amplify-cfn-templates/function/apiFunction-cloudformation-template.json",
+        "logicalId": "functionapiFunction"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-triberspace-dev-144501-deployment",
+        "s3Key": "amplify-builds/apiFunction-2f316d7871683779524f-build.zip"
+      }
+    }
+  },
+  "auth": {
+    "triberspace": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL",
+          "NAME"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-triberspace-dev-144501-deployment/amplify-cfn-templates/auth/triberspace-cloudformation-template.json",
+        "logicalId": "authtriberspace"
+      },
+      "lastPushTimeStamp": "2024-01-17T01:49:43.159Z",
+      "output": {
+        "UserPoolId": "us-east-1_LpaXo83TX",
+        "AppClientIDWeb": "1u597flp48oih7lammk474u5vb",
+        "AppClientID": "5o2u5tke9a9kg9mk8amhf96d3g",
+        "IdentityPoolId": "us-east-1:0b663246-aec4-452e-99b7-46a66612028c",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:323176902582:userpool/us-east-1_LpaXo83TX",
+        "IdentityPoolName": "testAuthIdentityPool__dev",
+        "UserPoolName": "triberspace"
+      },
+      "lastPushDirHash": "g8H5cTRkVkL1QhFeUV5yvqj3eoM="
+    }
+  }
+}

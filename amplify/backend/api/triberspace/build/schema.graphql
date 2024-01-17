@@ -1,0 +1,622 @@
+type Creator @aws_iam @aws_api_key {
+  id: ID!
+  World: World
+  Store: Store
+  name: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  creatorWorldId: ID
+  creatorStoreId: ID
+}
+
+type Store @aws_iam @aws_api_key {
+  id: ID!
+  Creator: Creator
+  Products(filter: ModelProductFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProductConnection
+  name: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  storeCreatorId: ID
+}
+
+type Product @aws_iam @aws_api_key {
+  id: ID!
+  storeID: ID!
+  Store: Store
+  itemName: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type World @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  Spaces(filter: ModelSpaceFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSpaceConnection
+  Creator: Creator
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  worldCreatorId: ID
+}
+
+type Space @aws_iam @aws_api_key {
+  id: ID!
+  title: String!
+  wID: ID!
+  World: World
+  Events(filter: ModelEventFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEventConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Event @aws_iam @aws_api_key {
+  id: ID!
+  name: String
+  type: String
+  spaceID: ID!
+  Comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
+  World: World
+  Space: Space
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  eventWorldId: ID
+}
+
+type Comment @aws_iam @aws_api_key {
+  id: ID!
+  content: String!
+  eventID: ID!
+  Event: Event
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCreatorConnection @aws_api_key @aws_iam {
+  items: [Creator]!
+  nextToken: String
+}
+
+input ModelCreatorFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelCreatorFilterInput]
+  or: [ModelCreatorFilterInput]
+  not: ModelCreatorFilterInput
+  creatorWorldId: ModelIDInput
+  creatorStoreId: ModelIDInput
+}
+
+type Query {
+  getCreator(id: ID!): Creator @aws_api_key @aws_iam
+  listCreators(filter: ModelCreatorFilterInput, limit: Int, nextToken: String): ModelCreatorConnection @aws_api_key @aws_iam
+  getStore(id: ID!): Store @aws_api_key @aws_iam
+  listStores(filter: ModelStoreFilterInput, limit: Int, nextToken: String): ModelStoreConnection @aws_api_key @aws_iam
+  getProduct(id: ID!): Product @aws_api_key @aws_iam
+  listProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection @aws_api_key @aws_iam
+  productsByStoreID(storeID: ID!, sortDirection: ModelSortDirection, filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection @aws_api_key @aws_iam
+  getWorld(id: ID!): World @aws_api_key @aws_iam
+  listWorlds(filter: ModelWorldFilterInput, limit: Int, nextToken: String): ModelWorldConnection @aws_api_key @aws_iam
+  getSpace(id: ID!): Space @aws_api_key @aws_iam
+  listSpaces(filter: ModelSpaceFilterInput, limit: Int, nextToken: String): ModelSpaceConnection @aws_api_key @aws_iam
+  spacesByWID(wID: ID!, sortDirection: ModelSortDirection, filter: ModelSpaceFilterInput, limit: Int, nextToken: String): ModelSpaceConnection @aws_api_key @aws_iam
+  getEvent(id: ID!): Event @aws_api_key @aws_iam
+  listEvents(filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection @aws_api_key @aws_iam
+  eventsBySpaceID(spaceID: ID!, sortDirection: ModelSortDirection, filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection @aws_api_key @aws_iam
+  getComment(id: ID!): Comment @aws_api_key @aws_iam
+  listComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection @aws_api_key @aws_iam
+  commentsByEventID(eventID: ID!, sortDirection: ModelSortDirection, filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection @aws_api_key @aws_iam
+}
+
+input ModelCreatorConditionInput {
+  name: ModelStringInput
+  and: [ModelCreatorConditionInput]
+  or: [ModelCreatorConditionInput]
+  not: ModelCreatorConditionInput
+  creatorWorldId: ModelIDInput
+  creatorStoreId: ModelIDInput
+}
+
+input CreateCreatorInput {
+  id: ID
+  name: String!
+  creatorWorldId: ID
+  creatorStoreId: ID
+}
+
+input UpdateCreatorInput {
+  id: ID!
+  name: String
+  creatorWorldId: ID
+  creatorStoreId: ID
+}
+
+input DeleteCreatorInput {
+  id: ID!
+}
+
+type Mutation {
+  createCreator(input: CreateCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
+  updateCreator(input: UpdateCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
+  deleteCreator(input: DeleteCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
+  createStore(input: CreateStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
+  updateStore(input: UpdateStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
+  deleteStore(input: DeleteStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
+  createProduct(input: CreateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  updateProduct(input: UpdateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  deleteProduct(input: DeleteProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  createWorld(input: CreateWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
+  updateWorld(input: UpdateWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
+  deleteWorld(input: DeleteWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
+  createSpace(input: CreateSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
+  updateSpace(input: UpdateSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
+  deleteSpace(input: DeleteSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
+  createEvent(input: CreateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  updateEvent(input: UpdateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  deleteEvent(input: DeleteEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  createComment(input: CreateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
+  updateComment(input: UpdateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
+  deleteComment(input: DeleteCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
+}
+
+input ModelSubscriptionCreatorFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  and: [ModelSubscriptionCreatorFilterInput]
+  or: [ModelSubscriptionCreatorFilterInput]
+}
+
+type Subscription {
+  onCreateCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["createCreator"]) @aws_api_key @aws_iam
+  onUpdateCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["updateCreator"]) @aws_api_key @aws_iam
+  onDeleteCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["deleteCreator"]) @aws_api_key @aws_iam
+  onCreateStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["createStore"]) @aws_api_key @aws_iam
+  onUpdateStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["updateStore"]) @aws_api_key @aws_iam
+  onDeleteStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["deleteStore"]) @aws_api_key @aws_iam
+  onCreateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["createProduct"]) @aws_api_key @aws_iam
+  onUpdateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["updateProduct"]) @aws_api_key @aws_iam
+  onDeleteProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["deleteProduct"]) @aws_api_key @aws_iam
+  onCreateWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["createWorld"]) @aws_api_key @aws_iam
+  onUpdateWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["updateWorld"]) @aws_api_key @aws_iam
+  onDeleteWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["deleteWorld"]) @aws_api_key @aws_iam
+  onCreateSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["createSpace"]) @aws_api_key @aws_iam
+  onUpdateSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["updateSpace"]) @aws_api_key @aws_iam
+  onDeleteSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["deleteSpace"]) @aws_api_key @aws_iam
+  onCreateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["createEvent"]) @aws_api_key @aws_iam
+  onUpdateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["updateEvent"]) @aws_api_key @aws_iam
+  onDeleteEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["deleteEvent"]) @aws_api_key @aws_iam
+  onCreateComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["createComment"]) @aws_api_key @aws_iam
+  onUpdateComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["updateComment"]) @aws_api_key @aws_iam
+  onDeleteComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["deleteComment"]) @aws_api_key @aws_iam
+}
+
+type ModelStoreConnection @aws_api_key @aws_iam {
+  items: [Store]!
+  nextToken: String
+}
+
+input ModelStoreFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelStoreFilterInput]
+  or: [ModelStoreFilterInput]
+  not: ModelStoreFilterInput
+  storeCreatorId: ModelIDInput
+}
+
+input ModelStoreConditionInput {
+  name: ModelStringInput
+  and: [ModelStoreConditionInput]
+  or: [ModelStoreConditionInput]
+  not: ModelStoreConditionInput
+  storeCreatorId: ModelIDInput
+}
+
+input CreateStoreInput {
+  id: ID
+  name: String
+  storeCreatorId: ID
+}
+
+input UpdateStoreInput {
+  id: ID!
+  name: String
+  storeCreatorId: ID
+}
+
+input DeleteStoreInput {
+  id: ID!
+}
+
+input ModelSubscriptionStoreFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  and: [ModelSubscriptionStoreFilterInput]
+  or: [ModelSubscriptionStoreFilterInput]
+}
+
+type ModelProductConnection @aws_iam @aws_api_key {
+  items: [Product]!
+  nextToken: String
+}
+
+input ModelProductFilterInput {
+  id: ModelIDInput
+  storeID: ModelIDInput
+  itemName: ModelStringInput
+  and: [ModelProductFilterInput]
+  or: [ModelProductFilterInput]
+  not: ModelProductFilterInput
+}
+
+input ModelProductConditionInput {
+  storeID: ModelIDInput
+  itemName: ModelStringInput
+  and: [ModelProductConditionInput]
+  or: [ModelProductConditionInput]
+  not: ModelProductConditionInput
+}
+
+input CreateProductInput {
+  id: ID
+  storeID: ID!
+  itemName: String!
+}
+
+input UpdateProductInput {
+  id: ID!
+  storeID: ID
+  itemName: String
+}
+
+input DeleteProductInput {
+  id: ID!
+}
+
+input ModelSubscriptionProductFilterInput {
+  id: ModelSubscriptionIDInput
+  storeID: ModelSubscriptionIDInput
+  itemName: ModelSubscriptionStringInput
+  and: [ModelSubscriptionProductFilterInput]
+  or: [ModelSubscriptionProductFilterInput]
+}
+
+type ModelWorldConnection @aws_api_key @aws_iam {
+  items: [World]!
+  nextToken: String
+}
+
+input ModelWorldFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelWorldFilterInput]
+  or: [ModelWorldFilterInput]
+  not: ModelWorldFilterInput
+  worldCreatorId: ModelIDInput
+}
+
+input ModelWorldConditionInput {
+  name: ModelStringInput
+  and: [ModelWorldConditionInput]
+  or: [ModelWorldConditionInput]
+  not: ModelWorldConditionInput
+  worldCreatorId: ModelIDInput
+}
+
+input CreateWorldInput {
+  id: ID
+  name: String!
+  worldCreatorId: ID
+}
+
+input UpdateWorldInput {
+  id: ID!
+  name: String
+  worldCreatorId: ID
+}
+
+input DeleteWorldInput {
+  id: ID!
+}
+
+input ModelSubscriptionWorldFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  and: [ModelSubscriptionWorldFilterInput]
+  or: [ModelSubscriptionWorldFilterInput]
+}
+
+type ModelSpaceConnection @aws_iam @aws_api_key {
+  items: [Space]!
+  nextToken: String
+}
+
+input ModelSpaceFilterInput {
+  id: ModelIDInput
+  title: ModelStringInput
+  wID: ModelIDInput
+  and: [ModelSpaceFilterInput]
+  or: [ModelSpaceFilterInput]
+  not: ModelSpaceFilterInput
+}
+
+input ModelSpaceConditionInput {
+  title: ModelStringInput
+  wID: ModelIDInput
+  and: [ModelSpaceConditionInput]
+  or: [ModelSpaceConditionInput]
+  not: ModelSpaceConditionInput
+}
+
+input CreateSpaceInput {
+  id: ID
+  title: String!
+  wID: ID!
+}
+
+input UpdateSpaceInput {
+  id: ID!
+  title: String
+  wID: ID
+}
+
+input DeleteSpaceInput {
+  id: ID!
+}
+
+input ModelSubscriptionSpaceFilterInput {
+  id: ModelSubscriptionIDInput
+  title: ModelSubscriptionStringInput
+  wID: ModelSubscriptionIDInput
+  and: [ModelSubscriptionSpaceFilterInput]
+  or: [ModelSubscriptionSpaceFilterInput]
+}
+
+type ModelEventConnection @aws_iam @aws_api_key {
+  items: [Event]!
+  nextToken: String
+}
+
+input ModelEventFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  type: ModelStringInput
+  spaceID: ModelIDInput
+  and: [ModelEventFilterInput]
+  or: [ModelEventFilterInput]
+  not: ModelEventFilterInput
+  eventWorldId: ModelIDInput
+}
+
+input ModelEventConditionInput {
+  name: ModelStringInput
+  type: ModelStringInput
+  spaceID: ModelIDInput
+  and: [ModelEventConditionInput]
+  or: [ModelEventConditionInput]
+  not: ModelEventConditionInput
+  eventWorldId: ModelIDInput
+}
+
+input CreateEventInput {
+  id: ID
+  name: String
+  type: String
+  spaceID: ID!
+  eventWorldId: ID
+}
+
+input UpdateEventInput {
+  id: ID!
+  name: String
+  type: String
+  spaceID: ID
+  eventWorldId: ID
+}
+
+input DeleteEventInput {
+  id: ID!
+}
+
+input ModelSubscriptionEventFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  type: ModelSubscriptionStringInput
+  spaceID: ModelSubscriptionIDInput
+  and: [ModelSubscriptionEventFilterInput]
+  or: [ModelSubscriptionEventFilterInput]
+}
+
+type ModelCommentConnection @aws_iam @aws_api_key {
+  items: [Comment]!
+  nextToken: String
+}
+
+input ModelCommentFilterInput {
+  id: ModelIDInput
+  content: ModelStringInput
+  eventID: ModelIDInput
+  and: [ModelCommentFilterInput]
+  or: [ModelCommentFilterInput]
+  not: ModelCommentFilterInput
+}
+
+input ModelCommentConditionInput {
+  content: ModelStringInput
+  eventID: ModelIDInput
+  and: [ModelCommentConditionInput]
+  or: [ModelCommentConditionInput]
+  not: ModelCommentConditionInput
+}
+
+input CreateCommentInput {
+  id: ID
+  content: String!
+  eventID: ID!
+}
+
+input UpdateCommentInput {
+  id: ID!
+  content: String
+  eventID: ID
+}
+
+input DeleteCommentInput {
+  id: ID!
+}
+
+input ModelSubscriptionCommentFilterInput {
+  id: ModelSubscriptionIDInput
+  content: ModelSubscriptionStringInput
+  eventID: ModelSubscriptionIDInput
+  and: [ModelSubscriptionCommentFilterInput]
+  or: [ModelSubscriptionCommentFilterInput]
+}

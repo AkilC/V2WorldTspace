@@ -1,0 +1,30 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-triberspace-dev-144501-authRole",
+      "UnauthRoleArn": "arn:aws:iam::323176902582:role/amplify-triberspace-dev-144501-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::323176902582:role/amplify-triberspace-dev-144501-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-triberspace-dev-144501-deployment",
+      "UnauthRoleName": "amplify-triberspace-dev-144501-unauthRole",
+      "StackName": "amplify-triberspace-dev-144501",
+      "StackId": "arn:aws:cloudformation:us-east-1:323176902582:stack/amplify-triberspace-dev-144501/16f6b2b0-a815-11ee-b582-0a9b6ab96a13",
+      "AmplifyAppId": "dvb0wv50ixfcp"
+    },
+    "categories": {
+      "function": {
+        "apiFunction": {
+          "deploymentBucketName": "amplify-triberspace-dev-144501-deployment",
+          "s3Key": "amplify-builds/apiFunction-2f316d7871683779524f-build.zip"
+        }
+      },
+      "api": {
+        "restAPI": {},
+        "triberspace": {}
+      },
+      "auth": {
+        "triberspace": {}
+      }
+    }
+  }
+}
