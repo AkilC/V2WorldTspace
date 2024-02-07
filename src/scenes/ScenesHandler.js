@@ -15,17 +15,9 @@ const Scene = ({ characterRef, element }) => {
 };
 
 const ScenesHandler = ({ characterRef }) => {
-  /* const { isWorldInitialized, initializeWorld } = React.useContext(WorldContext);
-
-  useEffect(() => {
-    if (!isWorldInitialized) {
-      initializeWorld();
-    }
-  }, [isWorldInitialized, initializeWorld]); */
 
   return (
     <>
-      {/* {isWorldInitialized && ( */}
         <Routes>
           <Route
             key="Hub"
@@ -48,7 +40,6 @@ const ScenesHandler = ({ characterRef }) => {
             element={<Scene characterRef={characterRef} element={<Gallery characterRef={characterRef}/>} />}
           />
         </Routes>
-      {/* )} */}
     </>
   );
 };

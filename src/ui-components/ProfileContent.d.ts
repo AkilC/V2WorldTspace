@@ -74,6 +74,8 @@ export declare type ProfileContentOverridesProps = {
     "Frame 70"?: PrimitiveOverrideProps<FlexProps>;
 } & EscapeHatchProps;
 export declare type ProfileContentProps = React.PropsWithChildren<Partial<FlexProps> & {
+    profile?: any;
+} & {
     overrides?: ProfileContentOverridesProps | undefined | null;
 }>;
 export default function ProfileContent(props: ProfileContentProps): React.ReactElement;

@@ -368,7 +368,7 @@
         "Name": "restAPI"
       }
     },
-    "restAPIDefault4XXResponsed3d8621a": {
+    "restAPIDefault4XXResponse9881fed3": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseType": "DEFAULT_4XX",
@@ -383,7 +383,7 @@
         }
       }
     },
-    "restAPIDefault5XXResponsed3d8621a": {
+    "restAPIDefault5XXResponse9881fed3": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseType": "DEFAULT_5XX",
@@ -398,7 +398,7 @@
         }
       }
     },
-    "DeploymentAPIGWrestAPI416102f0": {
+    "DeploymentAPIGWrestAPIdfe2caf3": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -416,8 +416,8 @@
         }
       },
       "DependsOn": [
-        "restAPIDefault4XXResponsed3d8621a",
-        "restAPIDefault5XXResponsed3d8621a"
+        "restAPIDefault4XXResponse9881fed3",
+        "restAPIDefault5XXResponse9881fed3"
       ]
     }
   }

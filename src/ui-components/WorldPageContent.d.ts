@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { World } from "../models";
 import { FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 import { SmallButtonProps } from "./SmallButton";
 import { LargeButtonProps } from "./LargeButton";
@@ -53,7 +52,7 @@ export declare type WorldPageContentOverridesProps = {
     "Vector 3"?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
 export declare type WorldPageContentProps = React.PropsWithChildren<Partial<FlexProps> & {
-    world?: World;
+    world?: any;
 } & {
     overrides?: WorldPageContentOverridesProps | undefined | null;
 }>;

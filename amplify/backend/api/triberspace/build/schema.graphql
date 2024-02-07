@@ -1,4 +1,29 @@
-type Creator @aws_iam @aws_api_key {
+type Avatar @aws_api_key @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  Profile: Profile
+  model: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  avatarProfileId: ID
+  owner: String
+}
+
+type Profile @aws_api_key @aws_iam @aws_cognito_user_pools {
+  id: ID!
+  username: String
+  name: String
+  instagram: String
+  twitter: String
+  Avatar: Avatar
+  bio: String
+  baseAvatarColor: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  profileAvatarId: ID
+  owner: String
+}
+
+type Creator @aws_api_key @aws_iam {
   id: ID!
   World: World
   Store: Store
@@ -9,7 +34,7 @@ type Creator @aws_iam @aws_api_key {
   creatorStoreId: ID
 }
 
-type Store @aws_iam @aws_api_key {
+type Store @aws_api_key @aws_iam {
   id: ID!
   Creator: Creator
   Products(filter: ModelProductFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProductConnection
@@ -19,7 +44,7 @@ type Store @aws_iam @aws_api_key {
   storeCreatorId: ID
 }
 
-type Product @aws_iam @aws_api_key {
+type Product @aws_api_key @aws_iam {
   id: ID!
   storeID: ID!
   Store: Store
@@ -28,7 +53,7 @@ type Product @aws_iam @aws_api_key {
   updatedAt: AWSDateTime!
 }
 
-type World @aws_iam @aws_api_key {
+type World @aws_api_key @aws_iam {
   id: ID!
   name: String!
   Spaces(filter: ModelSpaceFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelSpaceConnection
@@ -38,7 +63,7 @@ type World @aws_iam @aws_api_key {
   worldCreatorId: ID
 }
 
-type Space @aws_iam @aws_api_key {
+type Space @aws_api_key @aws_iam {
   id: ID!
   title: String!
   wID: ID!
@@ -48,7 +73,7 @@ type Space @aws_iam @aws_api_key {
   updatedAt: AWSDateTime!
 }
 
-type Event @aws_iam @aws_api_key {
+type Event @aws_api_key @aws_iam {
   id: ID!
   name: String
   type: String
@@ -61,7 +86,7 @@ type Event @aws_iam @aws_api_key {
   eventWorldId: ID
 }
 
-type Comment @aws_iam @aws_api_key {
+type Comment @aws_api_key @aws_iam {
   id: ID!
   content: String!
   eventID: ID!
@@ -220,22 +245,25 @@ enum ModelSortDirection {
   DESC
 }
 
-type ModelCreatorConnection @aws_api_key @aws_iam {
-  items: [Creator]!
+type ModelAvatarConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [Avatar]!
   nextToken: String
 }
 
-input ModelCreatorFilterInput {
+input ModelAvatarFilterInput {
   id: ModelIDInput
-  name: ModelStringInput
-  and: [ModelCreatorFilterInput]
-  or: [ModelCreatorFilterInput]
-  not: ModelCreatorFilterInput
-  creatorWorldId: ModelIDInput
-  creatorStoreId: ModelIDInput
+  model: ModelStringInput
+  and: [ModelAvatarFilterInput]
+  or: [ModelAvatarFilterInput]
+  not: ModelAvatarFilterInput
+  avatarProfileId: ModelIDInput
 }
 
 type Query {
+  getAvatar(id: ID!): Avatar @aws_api_key @aws_iam @aws_cognito_user_pools
+  listAvatars(filter: ModelAvatarFilterInput, limit: Int, nextToken: String): ModelAvatarConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  getProfile(id: ID!): Profile @aws_api_key @aws_iam @aws_cognito_user_pools
+  listProfiles(filter: ModelProfileFilterInput, limit: Int, nextToken: String): ModelProfileConnection @aws_api_key @aws_iam @aws_cognito_user_pools
   getCreator(id: ID!): Creator @aws_api_key @aws_iam
   listCreators(filter: ModelCreatorFilterInput, limit: Int, nextToken: String): ModelCreatorConnection @aws_api_key @aws_iam
   getStore(id: ID!): Store @aws_api_key @aws_iam
@@ -254,6 +282,182 @@ type Query {
   getComment(id: ID!): Comment @aws_api_key @aws_iam
   listComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection @aws_api_key @aws_iam
   commentsByEventID(eventID: ID!, sortDirection: ModelSortDirection, filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection @aws_api_key @aws_iam
+}
+
+input ModelAvatarConditionInput {
+  model: ModelStringInput
+  and: [ModelAvatarConditionInput]
+  or: [ModelAvatarConditionInput]
+  not: ModelAvatarConditionInput
+  avatarProfileId: ModelIDInput
+}
+
+input CreateAvatarInput {
+  id: ID
+  model: String
+  avatarProfileId: ID
+}
+
+input UpdateAvatarInput {
+  id: ID!
+  model: String
+  avatarProfileId: ID
+}
+
+input DeleteAvatarInput {
+  id: ID!
+}
+
+type Mutation {
+  createAvatar(input: CreateAvatarInput!, condition: ModelAvatarConditionInput): Avatar @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateAvatar(input: UpdateAvatarInput!, condition: ModelAvatarConditionInput): Avatar @aws_api_key @aws_iam @aws_cognito_user_pools
+  deleteAvatar(input: DeleteAvatarInput!, condition: ModelAvatarConditionInput): Avatar @aws_api_key @aws_iam @aws_cognito_user_pools
+  createProfile(input: CreateProfileInput!, condition: ModelProfileConditionInput): Profile @aws_api_key @aws_iam @aws_cognito_user_pools
+  updateProfile(input: UpdateProfileInput!, condition: ModelProfileConditionInput): Profile @aws_api_key @aws_iam @aws_cognito_user_pools
+  deleteProfile(input: DeleteProfileInput!, condition: ModelProfileConditionInput): Profile @aws_api_key @aws_iam @aws_cognito_user_pools
+  createCreator(input: CreateCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
+  updateCreator(input: UpdateCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
+  deleteCreator(input: DeleteCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
+  createStore(input: CreateStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
+  updateStore(input: UpdateStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
+  deleteStore(input: DeleteStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
+  createProduct(input: CreateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  updateProduct(input: UpdateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  deleteProduct(input: DeleteProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
+  createWorld(input: CreateWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
+  updateWorld(input: UpdateWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
+  deleteWorld(input: DeleteWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
+  createSpace(input: CreateSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
+  updateSpace(input: UpdateSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
+  deleteSpace(input: DeleteSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
+  createEvent(input: CreateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  updateEvent(input: UpdateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  deleteEvent(input: DeleteEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  createComment(input: CreateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
+  updateComment(input: UpdateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
+  deleteComment(input: DeleteCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
+}
+
+input ModelSubscriptionAvatarFilterInput {
+  id: ModelSubscriptionIDInput
+  model: ModelSubscriptionStringInput
+  and: [ModelSubscriptionAvatarFilterInput]
+  or: [ModelSubscriptionAvatarFilterInput]
+}
+
+type Subscription {
+  onCreateAvatar(filter: ModelSubscriptionAvatarFilterInput, owner: String): Avatar @aws_subscribe(mutations: ["createAvatar"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateAvatar(filter: ModelSubscriptionAvatarFilterInput, owner: String): Avatar @aws_subscribe(mutations: ["updateAvatar"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteAvatar(filter: ModelSubscriptionAvatarFilterInput, owner: String): Avatar @aws_subscribe(mutations: ["deleteAvatar"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onCreateProfile(filter: ModelSubscriptionProfileFilterInput, owner: String): Profile @aws_subscribe(mutations: ["createProfile"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateProfile(filter: ModelSubscriptionProfileFilterInput, owner: String): Profile @aws_subscribe(mutations: ["updateProfile"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteProfile(filter: ModelSubscriptionProfileFilterInput, owner: String): Profile @aws_subscribe(mutations: ["deleteProfile"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onCreateCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["createCreator"]) @aws_api_key @aws_iam
+  onUpdateCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["updateCreator"]) @aws_api_key @aws_iam
+  onDeleteCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["deleteCreator"]) @aws_api_key @aws_iam
+  onCreateStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["createStore"]) @aws_api_key @aws_iam
+  onUpdateStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["updateStore"]) @aws_api_key @aws_iam
+  onDeleteStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["deleteStore"]) @aws_api_key @aws_iam
+  onCreateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["createProduct"]) @aws_api_key @aws_iam
+  onUpdateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["updateProduct"]) @aws_api_key @aws_iam
+  onDeleteProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["deleteProduct"]) @aws_api_key @aws_iam
+  onCreateWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["createWorld"]) @aws_api_key @aws_iam
+  onUpdateWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["updateWorld"]) @aws_api_key @aws_iam
+  onDeleteWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["deleteWorld"]) @aws_api_key @aws_iam
+  onCreateSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["createSpace"]) @aws_api_key @aws_iam
+  onUpdateSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["updateSpace"]) @aws_api_key @aws_iam
+  onDeleteSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["deleteSpace"]) @aws_api_key @aws_iam
+  onCreateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["createEvent"]) @aws_api_key @aws_iam
+  onUpdateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["updateEvent"]) @aws_api_key @aws_iam
+  onDeleteEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["deleteEvent"]) @aws_api_key @aws_iam
+  onCreateComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["createComment"]) @aws_api_key @aws_iam
+  onUpdateComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["updateComment"]) @aws_api_key @aws_iam
+  onDeleteComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["deleteComment"]) @aws_api_key @aws_iam
+}
+
+type ModelProfileConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [Profile]!
+  nextToken: String
+}
+
+input ModelProfileFilterInput {
+  id: ModelIDInput
+  username: ModelStringInput
+  name: ModelStringInput
+  instagram: ModelStringInput
+  twitter: ModelStringInput
+  bio: ModelStringInput
+  baseAvatarColor: ModelStringInput
+  and: [ModelProfileFilterInput]
+  or: [ModelProfileFilterInput]
+  not: ModelProfileFilterInput
+  profileAvatarId: ModelIDInput
+}
+
+input ModelProfileConditionInput {
+  username: ModelStringInput
+  name: ModelStringInput
+  instagram: ModelStringInput
+  twitter: ModelStringInput
+  bio: ModelStringInput
+  baseAvatarColor: ModelStringInput
+  and: [ModelProfileConditionInput]
+  or: [ModelProfileConditionInput]
+  not: ModelProfileConditionInput
+  profileAvatarId: ModelIDInput
+}
+
+input CreateProfileInput {
+  id: ID
+  username: String
+  name: String
+  instagram: String
+  twitter: String
+  bio: String
+  baseAvatarColor: String
+  profileAvatarId: ID
+}
+
+input UpdateProfileInput {
+  id: ID!
+  username: String
+  name: String
+  instagram: String
+  twitter: String
+  bio: String
+  baseAvatarColor: String
+  profileAvatarId: ID
+}
+
+input DeleteProfileInput {
+  id: ID!
+}
+
+input ModelSubscriptionProfileFilterInput {
+  id: ModelSubscriptionIDInput
+  username: ModelSubscriptionStringInput
+  name: ModelSubscriptionStringInput
+  instagram: ModelSubscriptionStringInput
+  twitter: ModelSubscriptionStringInput
+  bio: ModelSubscriptionStringInput
+  baseAvatarColor: ModelSubscriptionStringInput
+  and: [ModelSubscriptionProfileFilterInput]
+  or: [ModelSubscriptionProfileFilterInput]
+}
+
+type ModelCreatorConnection @aws_api_key @aws_iam {
+  items: [Creator]!
+  nextToken: String
+}
+
+input ModelCreatorFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelCreatorFilterInput]
+  or: [ModelCreatorFilterInput]
+  not: ModelCreatorFilterInput
+  creatorWorldId: ModelIDInput
+  creatorStoreId: ModelIDInput
 }
 
 input ModelCreatorConditionInput {
@@ -283,59 +487,11 @@ input DeleteCreatorInput {
   id: ID!
 }
 
-type Mutation {
-  createCreator(input: CreateCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
-  updateCreator(input: UpdateCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
-  deleteCreator(input: DeleteCreatorInput!, condition: ModelCreatorConditionInput): Creator @aws_api_key @aws_iam
-  createStore(input: CreateStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
-  updateStore(input: UpdateStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
-  deleteStore(input: DeleteStoreInput!, condition: ModelStoreConditionInput): Store @aws_api_key @aws_iam
-  createProduct(input: CreateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
-  updateProduct(input: UpdateProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
-  deleteProduct(input: DeleteProductInput!, condition: ModelProductConditionInput): Product @aws_api_key @aws_iam
-  createWorld(input: CreateWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
-  updateWorld(input: UpdateWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
-  deleteWorld(input: DeleteWorldInput!, condition: ModelWorldConditionInput): World @aws_api_key @aws_iam
-  createSpace(input: CreateSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
-  updateSpace(input: UpdateSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
-  deleteSpace(input: DeleteSpaceInput!, condition: ModelSpaceConditionInput): Space @aws_api_key @aws_iam
-  createEvent(input: CreateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
-  updateEvent(input: UpdateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
-  deleteEvent(input: DeleteEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
-  createComment(input: CreateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
-  updateComment(input: UpdateCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
-  deleteComment(input: DeleteCommentInput!, condition: ModelCommentConditionInput): Comment @aws_api_key @aws_iam
-}
-
 input ModelSubscriptionCreatorFilterInput {
   id: ModelSubscriptionIDInput
   name: ModelSubscriptionStringInput
   and: [ModelSubscriptionCreatorFilterInput]
   or: [ModelSubscriptionCreatorFilterInput]
-}
-
-type Subscription {
-  onCreateCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["createCreator"]) @aws_api_key @aws_iam
-  onUpdateCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["updateCreator"]) @aws_api_key @aws_iam
-  onDeleteCreator(filter: ModelSubscriptionCreatorFilterInput): Creator @aws_subscribe(mutations: ["deleteCreator"]) @aws_api_key @aws_iam
-  onCreateStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["createStore"]) @aws_api_key @aws_iam
-  onUpdateStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["updateStore"]) @aws_api_key @aws_iam
-  onDeleteStore(filter: ModelSubscriptionStoreFilterInput): Store @aws_subscribe(mutations: ["deleteStore"]) @aws_api_key @aws_iam
-  onCreateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["createProduct"]) @aws_api_key @aws_iam
-  onUpdateProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["updateProduct"]) @aws_api_key @aws_iam
-  onDeleteProduct(filter: ModelSubscriptionProductFilterInput): Product @aws_subscribe(mutations: ["deleteProduct"]) @aws_api_key @aws_iam
-  onCreateWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["createWorld"]) @aws_api_key @aws_iam
-  onUpdateWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["updateWorld"]) @aws_api_key @aws_iam
-  onDeleteWorld(filter: ModelSubscriptionWorldFilterInput): World @aws_subscribe(mutations: ["deleteWorld"]) @aws_api_key @aws_iam
-  onCreateSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["createSpace"]) @aws_api_key @aws_iam
-  onUpdateSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["updateSpace"]) @aws_api_key @aws_iam
-  onDeleteSpace(filter: ModelSubscriptionSpaceFilterInput): Space @aws_subscribe(mutations: ["deleteSpace"]) @aws_api_key @aws_iam
-  onCreateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["createEvent"]) @aws_api_key @aws_iam
-  onUpdateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["updateEvent"]) @aws_api_key @aws_iam
-  onDeleteEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["deleteEvent"]) @aws_api_key @aws_iam
-  onCreateComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["createComment"]) @aws_api_key @aws_iam
-  onUpdateComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["updateComment"]) @aws_api_key @aws_iam
-  onDeleteComment(filter: ModelSubscriptionCommentFilterInput): Comment @aws_subscribe(mutations: ["deleteComment"]) @aws_api_key @aws_iam
 }
 
 type ModelStoreConnection @aws_api_key @aws_iam {
@@ -383,7 +539,7 @@ input ModelSubscriptionStoreFilterInput {
   or: [ModelSubscriptionStoreFilterInput]
 }
 
-type ModelProductConnection @aws_iam @aws_api_key {
+type ModelProductConnection @aws_api_key @aws_iam {
   items: [Product]!
   nextToken: String
 }
@@ -474,7 +630,7 @@ input ModelSubscriptionWorldFilterInput {
   or: [ModelSubscriptionWorldFilterInput]
 }
 
-type ModelSpaceConnection @aws_iam @aws_api_key {
+type ModelSpaceConnection @aws_api_key @aws_iam {
   items: [Space]!
   nextToken: String
 }
@@ -520,7 +676,7 @@ input ModelSubscriptionSpaceFilterInput {
   or: [ModelSubscriptionSpaceFilterInput]
 }
 
-type ModelEventConnection @aws_iam @aws_api_key {
+type ModelEventConnection @aws_api_key @aws_iam {
   items: [Event]!
   nextToken: String
 }
@@ -575,7 +731,7 @@ input ModelSubscriptionEventFilterInput {
   or: [ModelSubscriptionEventFilterInput]
 }
 
-type ModelCommentConnection @aws_iam @aws_api_key {
+type ModelCommentConnection @aws_api_key @aws_iam {
   items: [Comment]!
   nextToken: String
 }

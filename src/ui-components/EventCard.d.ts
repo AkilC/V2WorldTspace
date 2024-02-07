@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Event, World } from "../models";
 import { FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -34,8 +33,8 @@ export declare type EventCardOverridesProps = {
     Vector?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
 export declare type EventCardProps = React.PropsWithChildren<Partial<FlexProps> & {
-    event?: Event;
-    world?: World;
+    event?: any;
+    world?: any;
 } & {
     overrides?: EventCardOverridesProps | undefined | null;
 }>;

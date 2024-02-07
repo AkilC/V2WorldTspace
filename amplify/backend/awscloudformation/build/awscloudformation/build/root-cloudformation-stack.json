@@ -181,6 +181,12 @@
           "AppSyncApiName": "triberspace",
           "DynamoDBBillingMode": "PAY_PER_REQUEST",
           "DynamoDBEnableServerSideEncryption": false,
+          "AuthCognitoUserPoolId": {
+            "Fn::GetAtt": [
+              "authtriberspace",
+              "Outputs.UserPoolId"
+            ]
+          },
           "authRoleName": {
             "Ref": "AuthRoleName"
           },
@@ -188,18 +194,7 @@
             "Ref": "UnauthRoleName"
           },
           "S3DeploymentBucket": "amplify-triberspace-dev-144501-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/a00f3dba35824b36c20e517c202e5297edc8c6fe",
-          "env": "dev"
-        }
-      }
-    },
-    "functionapiFunction": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-triberspace-dev-144501-deployment/amplify-cfn-templates/function/apiFunction-cloudformation-template.json",
-        "Parameters": {
-          "deploymentBucketName": "amplify-triberspace-dev-144501-deployment",
-          "s3Key": "amplify-builds/apiFunction-2f316d7871683779524f-build.zip",
+          "S3DeploymentRootKey": "amplify-appsync-files/ff76b2a58fea7b887a024021ff05f348f88d285e",
           "env": "dev"
         }
       }
@@ -258,6 +253,17 @@
           },
           "breakCircularDependency": true,
           "dependsOn": "",
+          "env": "dev"
+        }
+      }
+    },
+    "functionapiFunction": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-triberspace-dev-144501-deployment/amplify-cfn-templates/function/apiFunction-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-triberspace-dev-144501-deployment",
+          "s3Key": "amplify-builds/apiFunction-2f316d7871683779524f-build.zip",
           "env": "dev"
         }
       }

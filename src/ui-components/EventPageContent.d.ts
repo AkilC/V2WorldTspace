@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Event, World } from "../models";
 import { FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 import { SmallButtonProps } from "./SmallButton";
 import { LargeButtonProps } from "./LargeButton";
@@ -77,8 +76,8 @@ export declare type EventPageContentOverridesProps = {
     EventCard39355261?: EventCardProps;
 } & EscapeHatchProps;
 export declare type EventPageContentProps = React.PropsWithChildren<Partial<FlexProps> & {
-    event?: Event;
-    world?: World;
+    event?: any;
+    world?: any;
 } & {
     overrides?: EventPageContentOverridesProps | undefined | null;
 }>;

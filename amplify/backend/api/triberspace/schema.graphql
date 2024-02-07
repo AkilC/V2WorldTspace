@@ -1,3 +1,20 @@
+type Avatar @model @auth(rules: [{allow: public}, {allow: owner}]) {
+  id: ID!
+  Profile: Profile @belongsTo
+  model: String
+}
+
+type Profile @model @auth(rules: [{allow: public}, {allow: owner}, {allow: private}]) {
+  id: ID!
+  username: String
+  name: String
+  instagram: String
+  twitter: String
+  Avatar: Avatar @hasOne
+  bio: String
+  baseAvatarColor: String
+}
+
 type Creator @model @auth(rules: [{allow: public}]) {
   id: ID!
   World: World @hasOne

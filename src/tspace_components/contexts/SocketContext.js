@@ -28,6 +28,7 @@ export const SocketProvider = ({ children }) => {
       try {
         const room = await client.joinOrCreate('my_room', { domain, token });  // Send the JWT token here
         setRoom(room);
+        console.log("Local session ID:", room.sessionId); // Log or store the session ID
       } catch (error) {
         console.error(error);
       }

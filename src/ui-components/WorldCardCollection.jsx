@@ -6,53 +6,115 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { World } from "../models";
-import { getOverrideProps, useDataStoreBinding } from "./utils";
+import { listWorlds } from "../graphql/queries";
 import WorldCard from "./WorldCard";
-import { Collection } from "@aws-amplify/ui-react";
+import { getOverrideProps } from "./utils";
+import { Collection, Pagination, Placeholder } from "@aws-amplify/ui-react";
+import { generateClient } from "aws-amplify/api";
+const nextToken = {};
+const apiCache = {};
+const client = generateClient();
 export default function WorldCardCollection(props) {
   const { items: itemsProp, overrideItems, overrides, ...rest } = props;
-  const [items, setItems] = React.useState(undefined);
-  const itemsDataStore = useDataStoreBinding({
-    type: "collection",
-    model: World,
-  }).items;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState("newGuid");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 6;
+  const isPaginated = false;
   React.useEffect(() => {
-    if (itemsProp !== undefined) {
-      setItems(itemsProp);
-      return;
+    nextToken[instanceKey] = "";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum) => {
+    setPageIndex(pageNum);
+  };
+  const loadPage = async (page) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    while ((newCache.length < cacheUntil || !isPaginated) && newNext != null) {
+      setLoading(true);
+      const variables = {
+        limit: pageSize,
+      };
+      if (newNext) {
+        variables["nextToken"] = newNext;
+      }
+      const result = (
+        await client.graphql({
+          query: listWorlds.replaceAll("__typename", ""),
+          variables,
+        })
+      ).data.listWorlds;
+      newCache.push(...result.items);
+      newNext = result.nextToken;
     }
-    async function setItemsFromDataStore() {
-      var loaded = await Promise.all(
-        itemsDataStore.map(async (item) => ({
-          ...item,
-          Spaces: await item.Spaces.toArray(),
-          Creator: await item.Creator,
-        }))
-      );
-      setItems(loaded);
-    }
-    setItemsFromDataStore();
-  }, [itemsProp, itemsDataStore]);
+    const cacheSlice = isPaginated
+      ? newCache.slice((page - 1) * pageSize, page * pageSize)
+      : newCache;
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
   return (
-    <Collection
-      type="list"
-      searchPlaceholder="Search..."
-      direction="row"
-      alignItems="stretch"
-      items={items || []}
-      {...getOverrideProps(overrides, "WorldCardCollection")}
-      {...rest}
-    >
-      {(item, index) => (
-        <WorldCard
-          world={item}
-          width="auto"
-          margin="0 8px 0 0"
-          key={item.id}
-          {...(overrideItems && overrideItems({ item, index }))}
-        ></WorldCard>
+    <div>
+      <Collection
+        type="list"
+        searchPlaceholder="Search..."
+        direction="row"
+        alignItems="stretch"
+        itemsPerPage={pageSize}
+        isPaginated={!isApiPagination && isPaginated}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, "WorldCardCollection")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size="large" />;
+          }
+          return (
+            <WorldCard
+              world={item}
+              width="auto"
+              margin="0 8px 0 0"
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            ></WorldCard>
+          );
+        }}
+      </Collection>
+      {isApiPagination && isPaginated && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
       )}
-    </Collection>
+    </div>
   );
 }

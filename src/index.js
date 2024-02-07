@@ -4,6 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { GlobalProvider } from './tspace_components/contexts/GlobalStore';
+import { Amplify } from 'aws-amplify';
+import { DataStore, AuthModeStrategyType } from 'aws-amplify/datastore';
+import awsExports from './aws-exports';
+import { cognitoUserPoolsTokenProvider } from 'aws-amplify/auth/cognito';
+import { CookieStorage } from 'aws-amplify/utils';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -17,11 +23,25 @@ document.addEventListener(
   { passive: false }
 );
 
+Amplify.configure(awsExports);
+
+// Set the auth mode strategy for DataStore
+DataStore.configure({
+  authModeStrategyType: AuthModeStrategyType.MULTI_AUTH
+});
+
+cognitoUserPoolsTokenProvider.setKeyValueStorage(new CookieStorage({
+  domain: '.localtest.me', // Notice the dot at the beginning
+  // This is important for localhost testing; cookies for localhost may not behave as expected
+  secure: process.env.NODE_ENV === "production" // Use secure cookies in production
+}));
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <GlobalProvider>
+        <App />
+      </GlobalProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

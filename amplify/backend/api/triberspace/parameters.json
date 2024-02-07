@@ -2,5 +2,11 @@
   "AppSyncApiName": "triberspace",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-12-31T21:34:49.018Z"
+  "AuthModeLastUpdated": "2024-02-01T00:51:04.434Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authtriberspace",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

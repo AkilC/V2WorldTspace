@@ -52,10 +52,22 @@
     "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
       "Type": "String"
     },
+    "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId": {
+      "Type": "String"
+    },
     "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
       "Type": "String"
     },
     "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarMutationcreateAvatarinit0FunctionMutationcreateAvatarinit0FunctionAppSyncFunction96BCB2D5FunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarMutationupdateAvatarinit0FunctionMutationupdateAvatarinit0FunctionAppSyncFunction99984389FunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarSubscriptionOnCreateAvatarDataResolverFnSubscriptionOnCreateAvatarDataResolverFnAppSyncFunctionABD09B33FunctionId": {
       "Type": "String"
     }
   },
@@ -388,36 +400,6 @@
         "ResponseMappingTemplate": "$util.toJson({})"
       }
     },
-    "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "Name": "QuerygetCreatorpostAuth0Function",
-        "FunctionVersion": "2018-05-29",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Query.getCreator.postAuth.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
-      }
-    },
     "QueryGetCreatorDataResolverFnQueryGetCreatorDataResolverFnAppSyncFunctionC904F2C3": {
       "Type": "AWS::AppSync::FunctionConfiguration",
       "Properties": {
@@ -487,10 +469,7 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -528,7 +507,7 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
@@ -604,10 +583,7 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -645,41 +621,11 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
-      }
-    },
-    "MutationcreateCreatorinit0FunctionMutationcreateCreatorinit0FunctionAppSyncFunctionA9361770": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "Name": "MutationcreateCreatorinit0Function",
-        "FunctionVersion": "2018-05-29",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.createCreator.init.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
       }
     },
     "MutationcreateCreatorauth0FunctionMutationcreateCreatorauth0FunctionAppSyncFunctionB1DD20D9": {
@@ -775,10 +721,7 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "MutationcreateCreatorinit0FunctionMutationcreateCreatorinit0FunctionAppSyncFunctionA9361770",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarMutationcreateAvatarinit0FunctionMutationcreateAvatarinit0FunctionAppSyncFunction96BCB2D5FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -787,10 +730,7 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -828,41 +768,11 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
-      }
-    },
-    "MutationupdateCreatorinit0FunctionMutationupdateCreatorinit0FunctionAppSyncFunction1CDCDEA0": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "Name": "MutationupdateCreatorinit0Function",
-        "FunctionVersion": "2018-05-29",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.updateCreator.init.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
       }
     },
     "MutationupdateCreatorauth0FunctionMutationupdateCreatorauth0FunctionAppSyncFunctionAEA77C91": {
@@ -979,10 +889,7 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "MutationupdateCreatorinit0FunctionMutationupdateCreatorinit0FunctionAppSyncFunction1CDCDEA0",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarMutationupdateAvatarinit0FunctionMutationupdateAvatarinit0FunctionAppSyncFunction99984389FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -991,10 +898,7 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -1032,7 +936,7 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
@@ -1159,10 +1063,7 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -1200,7 +1101,7 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
@@ -1237,51 +1138,6 @@
         "ResponseMappingTemplate": "$util.toJson({})"
       }
     },
-    "SubscriptionOnCreateCreatorDataResolverFnSubscriptionOnCreateCreatorDataResolverFnAppSyncFunction158E054F": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "Name": "SubscriptionOnCreateCreatorDataResolverFn",
-        "FunctionVersion": "2018-05-29",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Subscription.onCreateCreator.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Subscription.onCreateCreator.res.vtl"
-            ]
-          ]
-        }
-      }
-    },
     "SubscriptiononCreateCreatorResolver": {
       "Type": "AWS::AppSync::Resolver",
       "Properties": {
@@ -1300,16 +1156,10 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "SubscriptionOnCreateCreatorDataResolverFnSubscriptionOnCreateCreatorDataResolverFnAppSyncFunction158E054F",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarSubscriptionOnCreateAvatarDataResolverFnSubscriptionOnCreateAvatarDataResolverFnAppSyncFunctionABD09B33FunctionId"
             }
           ]
         },
@@ -1337,7 +1187,7 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
@@ -1362,16 +1212,10 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "SubscriptionOnCreateCreatorDataResolverFnSubscriptionOnCreateCreatorDataResolverFnAppSyncFunction158E054F",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarSubscriptionOnCreateAvatarDataResolverFnSubscriptionOnCreateAvatarDataResolverFnAppSyncFunctionABD09B33FunctionId"
             }
           ]
         },
@@ -1399,7 +1243,7 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
@@ -1424,16 +1268,10 @@
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarQuerygetAvatarpostAuth0FunctionQuerygetAvatarpostAuth0FunctionAppSyncFunction28E73EAAFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "SubscriptionOnCreateCreatorDataResolverFnSubscriptionOnCreateCreatorDataResolverFnAppSyncFunction158E054F",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackAvatarNestedStackAvatarNestedStackResourceEDF1737DOutputstransformerrootstackAvatarSubscriptionOnCreateAvatarDataResolverFnSubscriptionOnCreateAvatarDataResolverFnAppSyncFunctionABD09B33FunctionId"
             }
           ]
         },
@@ -1461,7 +1299,7 @@
               {
                 "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
               },
-              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"identityPoolId\", \"us-east-1:0b663246-aec4-452e-99b7-46a66612028c\"))\n$util.qr($ctx.stash.put(\"adminRoles\", [\"us-east-1_9vsbUzP9E_Full-access/CognitoIdentityCredentials\",\"us-east-1_9vsbUzP9E_Manage-only/CognitoIdentityCredentials\"]))\n$util.toJson({})"
             ]
           ]
         },
@@ -1541,22 +1379,6 @@
         ]
       }
     },
-    "transformerrootstackCreatorQuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunction5DA32ADEFunctionId": {
-      "Value": {
-        "Fn::GetAtt": [
-          "QuerygetCreatorpostAuth0FunctionQuerygetCreatorpostAuth0FunctionAppSyncFunctionD782CFDE",
-          "FunctionId"
-        ]
-      }
-    },
-    "transformerrootstackCreatorMutationcreateCreatorinit0FunctionMutationcreateCreatorinit0FunctionAppSyncFunction35B61149FunctionId": {
-      "Value": {
-        "Fn::GetAtt": [
-          "MutationcreateCreatorinit0FunctionMutationcreateCreatorinit0FunctionAppSyncFunctionA9361770",
-          "FunctionId"
-        ]
-      }
-    },
     "transformerrootstackCreatorMutationcreateCreatorauth0FunctionMutationcreateCreatorauth0FunctionAppSyncFunction6013394EFunctionId": {
       "Value": {
         "Fn::GetAtt": [
@@ -1565,26 +1387,10 @@
         ]
       }
     },
-    "transformerrootstackCreatorMutationupdateCreatorinit0FunctionMutationupdateCreatorinit0FunctionAppSyncFunction5A67D1C0FunctionId": {
-      "Value": {
-        "Fn::GetAtt": [
-          "MutationupdateCreatorinit0FunctionMutationupdateCreatorinit0FunctionAppSyncFunction1CDCDEA0",
-          "FunctionId"
-        ]
-      }
-    },
     "transformerrootstackCreatorSubscriptiononCreateCreatorauth0FunctionSubscriptiononCreateCreatorauth0FunctionAppSyncFunctionB2A4FF96FunctionId": {
       "Value": {
         "Fn::GetAtt": [
           "SubscriptiononCreateCreatorauth0FunctionSubscriptiononCreateCreatorauth0FunctionAppSyncFunction3853AD7F",
-          "FunctionId"
-        ]
-      }
-    },
-    "transformerrootstackCreatorSubscriptionOnCreateCreatorDataResolverFnSubscriptionOnCreateCreatorDataResolverFnAppSyncFunction3D124B75FunctionId": {
-      "Value": {
-        "Fn::GetAtt": [
-          "SubscriptionOnCreateCreatorDataResolverFnSubscriptionOnCreateCreatorDataResolverFnAppSyncFunction158E054F",
           "FunctionId"
         ]
       }

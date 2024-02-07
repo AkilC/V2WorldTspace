@@ -10,7 +10,7 @@ import { getOverrideProps } from "./utils";
 import LargeButton from "./LargeButton";
 import { Flex, Icon, Text } from "@aws-amplify/ui-react";
 export default function ProfileContent(props) {
-  const { overrides, ...rest } = props;
+  const { profile, overrides, ...rest } = props;
   return (
     <Flex
       gap="24px"
@@ -503,7 +503,7 @@ export default function ProfileContent(props) {
                     position="relative"
                     padding="0px 0px 0px 0px"
                     whiteSpace="pre-wrap"
-                    children="@username"
+                    children={profile?.instagram}
                     {...getOverrideProps(overrides, "@username38863643")}
                   ></Text>
                 </Flex>
@@ -580,7 +580,7 @@ export default function ProfileContent(props) {
                     position="relative"
                     padding="0px 0px 0px 0px"
                     whiteSpace="pre-wrap"
-                    children="@username"
+                    children={profile?.twitter}
                     {...getOverrideProps(overrides, "@username38863647")}
                   ></Text>
                 </Flex>

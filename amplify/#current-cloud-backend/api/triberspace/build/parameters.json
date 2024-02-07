@@ -2,6 +2,12 @@
     "AppSyncApiName": "triberspace",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authtriberspace",
+            "Outputs.UserPoolId"
+        ]
+    },
     "authRoleName": {
         "Ref": "AuthRoleName"
     },
@@ -9,5 +15,5 @@
         "Ref": "UnauthRoleName"
     },
     "S3DeploymentBucket": "amplify-triberspace-dev-144501-deployment",
-    "S3DeploymentRootKey": "amplify-appsync-files/a00f3dba35824b36c20e517c202e5297edc8c6fe"
+    "S3DeploymentRootKey": "amplify-appsync-files/ff76b2a58fea7b887a024021ff05f348f88d285e"
 }

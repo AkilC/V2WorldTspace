@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { World } from "../models";
 import { FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -31,7 +30,7 @@ export declare type WorldCardOverridesProps = {
     Vector?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
 export declare type WorldCardProps = React.PropsWithChildren<Partial<FlexProps> & {
-    world?: World;
+    world?: any;
 } & {
     overrides?: WorldCardOverridesProps | undefined | null;
 }>;

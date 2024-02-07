@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import {WorldContext} from '../contexts/WorldContext';
 import { AvatarContext } from '../contexts/AvatarContext'; // Adjust the path accordingly
 import { Body, World, Plane as CannonPlane } from 'cannon-es';
+import { GlobalContext } from '../contexts/GlobalStore';
 
 const Character = React.forwardRef(({ animation, ...props }, ref) => {
   const groupRef = useRef();
@@ -12,6 +13,18 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
   const [mixer, setMixer] = useState(null);
   const { world, isWorldInitialized } = useContext(WorldContext);
   const { avatarColor } = useContext(AvatarContext); // <-- Access the avatarColor from the context
+
+  const { fetchUserProfile } = useContext(GlobalContext);
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+        const getUserProfile = async () => {
+            const profile = await fetchUserProfile();
+            setUserProfile(profile);
+        };
+
+        getUserProfile();
+  }, [fetchUserProfile]);
 
   useEffect(() => {
     const mixerInstance = new THREE.AnimationMixer(scene);
@@ -68,14 +81,14 @@ const Character = React.forwardRef(({ animation, ...props }, ref) => {
   });
 
   useEffect(() => {
-    if (scene) {
+    if (scene && userProfile) {
       scene.traverse(function (child) {
         if (child.isMesh) {
-          child.material = new THREE.MeshStandardMaterial({ color: avatarColor });
+          child.material = new THREE.MeshStandardMaterial({ color: userProfile.baseAvatarColor });
         }
       });
     }
-  }, [scene, avatarColor]); // <-- Added avatarColor as a dependency
+  }, [scene, userProfile]);
 
   return (
     <group ref={ref} {...props} scale={[0.35, 0.35, 0.35]} rotation={[0, Math.PI, 0]} position={[0, 0, 0]} dispose={null}>

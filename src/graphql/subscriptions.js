@@ -1,6 +1,255 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateAvatar = /* GraphQL */ `
+  subscription OnCreateAvatar(
+    $filter: ModelSubscriptionAvatarFilterInput
+    $owner: String
+  ) {
+    onCreateAvatar(filter: $filter, owner: $owner) {
+      id
+      Profile {
+        id
+        username
+        name
+        instagram
+        twitter
+        Avatar {
+          id
+          model
+          createdAt
+          updatedAt
+          avatarProfileId
+          owner
+          __typename
+        }
+        bio
+        baseAvatarColor
+        createdAt
+        updatedAt
+        profileAvatarId
+        owner
+        __typename
+      }
+      model
+      createdAt
+      updatedAt
+      avatarProfileId
+      owner
+      __typename
+    }
+  }
+`;
+export const onUpdateAvatar = /* GraphQL */ `
+  subscription OnUpdateAvatar(
+    $filter: ModelSubscriptionAvatarFilterInput
+    $owner: String
+  ) {
+    onUpdateAvatar(filter: $filter, owner: $owner) {
+      id
+      Profile {
+        id
+        username
+        name
+        instagram
+        twitter
+        Avatar {
+          id
+          model
+          createdAt
+          updatedAt
+          avatarProfileId
+          owner
+          __typename
+        }
+        bio
+        baseAvatarColor
+        createdAt
+        updatedAt
+        profileAvatarId
+        owner
+        __typename
+      }
+      model
+      createdAt
+      updatedAt
+      avatarProfileId
+      owner
+      __typename
+    }
+  }
+`;
+export const onDeleteAvatar = /* GraphQL */ `
+  subscription OnDeleteAvatar(
+    $filter: ModelSubscriptionAvatarFilterInput
+    $owner: String
+  ) {
+    onDeleteAvatar(filter: $filter, owner: $owner) {
+      id
+      Profile {
+        id
+        username
+        name
+        instagram
+        twitter
+        Avatar {
+          id
+          model
+          createdAt
+          updatedAt
+          avatarProfileId
+          owner
+          __typename
+        }
+        bio
+        baseAvatarColor
+        createdAt
+        updatedAt
+        profileAvatarId
+        owner
+        __typename
+      }
+      model
+      createdAt
+      updatedAt
+      avatarProfileId
+      owner
+      __typename
+    }
+  }
+`;
+export const onCreateProfile = /* GraphQL */ `
+  subscription OnCreateProfile(
+    $filter: ModelSubscriptionProfileFilterInput
+    $owner: String
+  ) {
+    onCreateProfile(filter: $filter, owner: $owner) {
+      id
+      username
+      name
+      instagram
+      twitter
+      Avatar {
+        id
+        Profile {
+          id
+          username
+          name
+          instagram
+          twitter
+          bio
+          baseAvatarColor
+          createdAt
+          updatedAt
+          profileAvatarId
+          owner
+          __typename
+        }
+        model
+        createdAt
+        updatedAt
+        avatarProfileId
+        owner
+        __typename
+      }
+      bio
+      baseAvatarColor
+      createdAt
+      updatedAt
+      profileAvatarId
+      owner
+      __typename
+    }
+  }
+`;
+export const onUpdateProfile = /* GraphQL */ `
+  subscription OnUpdateProfile(
+    $filter: ModelSubscriptionProfileFilterInput
+    $owner: String
+  ) {
+    onUpdateProfile(filter: $filter, owner: $owner) {
+      id
+      username
+      name
+      instagram
+      twitter
+      Avatar {
+        id
+        Profile {
+          id
+          username
+          name
+          instagram
+          twitter
+          bio
+          baseAvatarColor
+          createdAt
+          updatedAt
+          profileAvatarId
+          owner
+          __typename
+        }
+        model
+        createdAt
+        updatedAt
+        avatarProfileId
+        owner
+        __typename
+      }
+      bio
+      baseAvatarColor
+      createdAt
+      updatedAt
+      profileAvatarId
+      owner
+      __typename
+    }
+  }
+`;
+export const onDeleteProfile = /* GraphQL */ `
+  subscription OnDeleteProfile(
+    $filter: ModelSubscriptionProfileFilterInput
+    $owner: String
+  ) {
+    onDeleteProfile(filter: $filter, owner: $owner) {
+      id
+      username
+      name
+      instagram
+      twitter
+      Avatar {
+        id
+        Profile {
+          id
+          username
+          name
+          instagram
+          twitter
+          bio
+          baseAvatarColor
+          createdAt
+          updatedAt
+          profileAvatarId
+          owner
+          __typename
+        }
+        model
+        createdAt
+        updatedAt
+        avatarProfileId
+        owner
+        __typename
+      }
+      bio
+      baseAvatarColor
+      createdAt
+      updatedAt
+      profileAvatarId
+      owner
+      __typename
+    }
+  }
+`;
 export const onCreateCreator = /* GraphQL */ `
   subscription OnCreateCreator($filter: ModelSubscriptionCreatorFilterInput) {
     onCreateCreator(filter: $filter) {
@@ -9,35 +258,11 @@ export const onCreateCreator = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -54,22 +279,6 @@ export const onCreateCreator = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -78,14 +287,6 @@ export const onCreateCreator = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -112,35 +313,11 @@ export const onUpdateCreator = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -157,22 +334,6 @@ export const onUpdateCreator = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -181,14 +342,6 @@ export const onUpdateCreator = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -215,35 +368,11 @@ export const onDeleteCreator = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -260,22 +389,6 @@ export const onDeleteCreator = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -284,14 +397,6 @@ export const onDeleteCreator = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -319,19 +424,6 @@ export const onCreateStore = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -339,19 +431,6 @@ export const onCreateStore = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -369,14 +448,6 @@ export const onCreateStore = /* GraphQL */ `
         items {
           id
           storeID
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           itemName
           createdAt
           updatedAt
@@ -402,19 +473,6 @@ export const onUpdateStore = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -422,19 +480,6 @@ export const onUpdateStore = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -452,14 +497,6 @@ export const onUpdateStore = /* GraphQL */ `
         items {
           id
           storeID
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           itemName
           createdAt
           updatedAt
@@ -485,19 +522,6 @@ export const onDeleteStore = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -505,19 +529,6 @@ export const onDeleteStore = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -535,14 +546,6 @@ export const onDeleteStore = /* GraphQL */ `
         items {
           id
           storeID
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           itemName
           createdAt
           updatedAt
@@ -568,22 +571,6 @@ export const onCreateProduct = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -592,14 +579,6 @@ export const onCreateProduct = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -625,22 +604,6 @@ export const onUpdateProduct = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -649,14 +612,6 @@ export const onUpdateProduct = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -682,22 +637,6 @@ export const onDeleteProduct = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -706,14 +645,6 @@ export const onDeleteProduct = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -740,18 +671,6 @@ export const onCreateWorld = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -764,19 +683,6 @@ export const onCreateWorld = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -784,19 +690,6 @@ export const onCreateWorld = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -827,18 +720,6 @@ export const onUpdateWorld = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -851,19 +732,6 @@ export const onUpdateWorld = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -871,19 +739,6 @@ export const onUpdateWorld = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -914,18 +769,6 @@ export const onDeleteWorld = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -938,19 +781,6 @@ export const onDeleteWorld = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -958,19 +788,6 @@ export const onDeleteWorld = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1001,35 +818,11 @@ export const onCreateSpace = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1048,26 +841,6 @@ export const onCreateSpace = /* GraphQL */ `
           name
           type
           spaceID
-          Comments {
-            nextToken
-            __typename
-          }
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Space {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           createdAt
           updatedAt
           eventWorldId
@@ -1092,35 +865,11 @@ export const onUpdateSpace = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1139,26 +888,6 @@ export const onUpdateSpace = /* GraphQL */ `
           name
           type
           spaceID
-          Comments {
-            nextToken
-            __typename
-          }
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Space {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           createdAt
           updatedAt
           eventWorldId
@@ -1183,35 +912,11 @@ export const onDeleteSpace = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1230,26 +935,6 @@ export const onDeleteSpace = /* GraphQL */ `
           name
           type
           spaceID
-          Comments {
-            nextToken
-            __typename
-          }
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Space {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           createdAt
           updatedAt
           eventWorldId
@@ -1276,16 +961,6 @@ export const onCreateEvent = /* GraphQL */ `
           id
           content
           eventID
-          Event {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1297,35 +972,11 @@ export const onCreateEvent = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1345,35 +996,12 @@ export const onCreateEvent = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
           __typename
         }
         Events {
-          items {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           nextToken
           __typename
         }
@@ -1400,16 +1028,6 @@ export const onUpdateEvent = /* GraphQL */ `
           id
           content
           eventID
-          Event {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1421,35 +1039,11 @@ export const onUpdateEvent = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1469,35 +1063,12 @@ export const onUpdateEvent = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
           __typename
         }
         Events {
-          items {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           nextToken
           __typename
         }
@@ -1524,16 +1095,6 @@ export const onDeleteEvent = /* GraphQL */ `
           id
           content
           eventID
-          Event {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1545,35 +1106,11 @@ export const onDeleteEvent = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -1593,35 +1130,12 @@ export const onDeleteEvent = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
           __typename
         }
         Events {
-          items {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           nextToken
           __typename
         }
@@ -1648,33 +1162,12 @@ export const onCreateComment = /* GraphQL */ `
         type
         spaceID
         Comments {
-          items {
-            id
-            content
-            eventID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -1684,18 +1177,6 @@ export const onCreateComment = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1723,33 +1204,12 @@ export const onUpdateComment = /* GraphQL */ `
         type
         spaceID
         Comments {
-          items {
-            id
-            content
-            eventID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -1759,18 +1219,6 @@ export const onUpdateComment = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1798,33 +1246,12 @@ export const onDeleteComment = /* GraphQL */ `
         type
         spaceID
         Comments {
-          items {
-            id
-            content
-            eventID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -1834,18 +1261,6 @@ export const onDeleteComment = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename

@@ -5,7 +5,8 @@
  **************************************************************************/
 
 import * as React from "react";
-import { FlexProps, IconProps, ViewProps } from "@aws-amplify/ui-react";
+import { MyIconProps } from "./MyIcon";
+import { FlexProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -19,16 +20,12 @@ export declare type Variant = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type IconSetOverridesProps = {
     IconSet?: PrimitiveOverrideProps<FlexProps>;
-    Icons38588056?: PrimitiveOverrideProps<FlexProps>;
-    Union?: PrimitiveOverrideProps<IconProps>;
-    "Rectangle 1"?: PrimitiveOverrideProps<ViewProps>;
-    "Rectangle 4"?: PrimitiveOverrideProps<ViewProps>;
-    "Rectangle 2"?: PrimitiveOverrideProps<ViewProps>;
-    "Rectangle 3"?: PrimitiveOverrideProps<ViewProps>;
-    Icons38588092?: PrimitiveOverrideProps<FlexProps>;
-    Vector38588093?: PrimitiveOverrideProps<IconProps>;
-    Icons38588124?: PrimitiveOverrideProps<FlexProps>;
-    Vector38588125?: PrimitiveOverrideProps<IconProps>;
+    Icons40073271?: PrimitiveOverrideProps<FlexProps>;
+    MyIcon40073272?: MyIconProps;
+    Icons40073273?: PrimitiveOverrideProps<FlexProps>;
+    MyIcon40073274?: MyIconProps;
+    Icons40073275?: PrimitiveOverrideProps<FlexProps>;
+    MyIcon40073276?: MyIconProps;
 } & EscapeHatchProps;
 export declare type IconSetProps = React.PropsWithChildren<Partial<FlexProps> & {
     overrides?: IconSetOverridesProps | undefined | null;

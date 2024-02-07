@@ -45,7 +45,7 @@ const Hub = ({ characterRef }) => {
 
   return (
     <>
-      {myScene && <primitive object={myScene} />}
+      {myScene && <primitive object={myScene} scale={[0.5, 0.5, 0.5]}/>}
       {/*<ambientLight intensity={1} /> */}
       <directionalLight
           castShadow
@@ -65,9 +65,9 @@ const Hub = ({ characterRef }) => {
         {/* <CustomPixelationEffect pixelSize={4.0} /> */}
         {/* Other passes */}
       {/* </EffectComposer> */}
-      <Effects>
+      {/* <Effects>
         <renderPixelatedPass args={[resolution, 1, scene, camera]} />
-      </Effects>
+      </Effects> */}
       <Stars/>
     </>
   );

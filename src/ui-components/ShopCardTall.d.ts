@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Product, Creator } from "../models";
 import { FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -31,8 +30,8 @@ export declare type ShopCardTallOverridesProps = {
     "400 ($80)"?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type ShopCardTallProps = React.PropsWithChildren<Partial<FlexProps> & {
-    product?: Product;
-    creator?: Creator;
+    product?: any;
+    creator?: any;
 } & {
     overrides?: ShopCardTallOverridesProps | undefined | null;
 }>;

@@ -1,6 +1,153 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getAvatar = /* GraphQL */ `
+  query GetAvatar($id: ID!) {
+    getAvatar(id: $id) {
+      id
+      Profile {
+        id
+        username
+        name
+        instagram
+        twitter
+        Avatar {
+          id
+          model
+          createdAt
+          updatedAt
+          avatarProfileId
+          owner
+          __typename
+        }
+        bio
+        baseAvatarColor
+        createdAt
+        updatedAt
+        profileAvatarId
+        owner
+        __typename
+      }
+      model
+      createdAt
+      updatedAt
+      avatarProfileId
+      owner
+      __typename
+    }
+  }
+`;
+export const listAvatars = /* GraphQL */ `
+  query ListAvatars(
+    $filter: ModelAvatarFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAvatars(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        Profile {
+          id
+          username
+          name
+          instagram
+          twitter
+          bio
+          baseAvatarColor
+          createdAt
+          updatedAt
+          profileAvatarId
+          owner
+          __typename
+        }
+        model
+        createdAt
+        updatedAt
+        avatarProfileId
+        owner
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getProfile = /* GraphQL */ `
+  query GetProfile($id: ID!) {
+    getProfile(id: $id) {
+      id
+      username
+      name
+      instagram
+      twitter
+      Avatar {
+        id
+        Profile {
+          id
+          username
+          name
+          instagram
+          twitter
+          bio
+          baseAvatarColor
+          createdAt
+          updatedAt
+          profileAvatarId
+          owner
+          __typename
+        }
+        model
+        createdAt
+        updatedAt
+        avatarProfileId
+        owner
+        __typename
+      }
+      bio
+      baseAvatarColor
+      createdAt
+      updatedAt
+      profileAvatarId
+      owner
+      __typename
+    }
+  }
+`;
+export const listProfiles = /* GraphQL */ `
+  query ListProfiles(
+    $filter: ModelProfileFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        username
+        name
+        instagram
+        twitter
+        Avatar {
+          id
+          model
+          createdAt
+          updatedAt
+          avatarProfileId
+          owner
+          __typename
+        }
+        bio
+        baseAvatarColor
+        createdAt
+        updatedAt
+        profileAvatarId
+        owner
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getCreator = /* GraphQL */ `
   query GetCreator($id: ID!) {
     getCreator(id: $id) {
@@ -9,35 +156,11 @@ export const getCreator = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -54,22 +177,6 @@ export const getCreator = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -78,14 +185,6 @@ export const getCreator = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -116,19 +215,6 @@ export const listCreators = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -136,19 +222,6 @@ export const listCreators = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -176,19 +249,6 @@ export const getStore = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -196,19 +256,6 @@ export const getStore = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -226,14 +273,6 @@ export const getStore = /* GraphQL */ `
         items {
           id
           storeID
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           itemName
           createdAt
           updatedAt
@@ -261,22 +300,6 @@ export const listStores = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -285,14 +308,6 @@ export const listStores = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -316,22 +331,6 @@ export const getProduct = /* GraphQL */ `
         id
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -340,14 +339,6 @@ export const getProduct = /* GraphQL */ `
           __typename
         }
         Products {
-          items {
-            id
-            storeID
-            itemName
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
@@ -376,19 +367,6 @@ export const listProducts = /* GraphQL */ `
         storeID
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -425,19 +403,6 @@ export const productsByStoreID = /* GraphQL */ `
         storeID
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -464,18 +429,6 @@ export const getWorld = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -488,19 +441,6 @@ export const getWorld = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -508,19 +448,6 @@ export const getWorld = /* GraphQL */ `
         }
         Store {
           id
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
-          Products {
-            nextToken
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -552,35 +479,11 @@ export const listWorlds = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -608,35 +511,11 @@ export const getSpace = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -655,26 +534,6 @@ export const getSpace = /* GraphQL */ `
           name
           type
           spaceID
-          Comments {
-            nextToken
-            __typename
-          }
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Space {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           createdAt
           updatedAt
           eventWorldId
@@ -703,35 +562,12 @@ export const listSpaces = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
           __typename
         }
         Events {
-          items {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           nextToken
           __typename
         }
@@ -766,35 +602,12 @@ export const spacesByWID = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
           __typename
         }
         Events {
-          items {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           nextToken
           __typename
         }
@@ -819,16 +632,6 @@ export const getEvent = /* GraphQL */ `
           id
           content
           eventID
-          Event {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -840,35 +643,11 @@ export const getEvent = /* GraphQL */ `
         id
         name
         Spaces {
-          items {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         Creator {
           id
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Store {
-            id
-            name
-            createdAt
-            updatedAt
-            storeCreatorId
-            __typename
-          }
           name
           createdAt
           updatedAt
@@ -888,35 +667,12 @@ export const getEvent = /* GraphQL */ `
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
           __typename
         }
         Events {
-          items {
-            id
-            name
-            type
-            spaceID
-            createdAt
-            updatedAt
-            eventWorldId
-            __typename
-          }
           nextToken
           __typename
         }
@@ -944,33 +700,12 @@ export const listEvents = /* GraphQL */ `
         type
         spaceID
         Comments {
-          items {
-            id
-            content
-            eventID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -980,18 +715,6 @@ export const listEvents = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1027,33 +750,12 @@ export const eventsBySpaceID = /* GraphQL */ `
         type
         spaceID
         Comments {
-          items {
-            id
-            content
-            eventID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -1063,18 +765,6 @@ export const eventsBySpaceID = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1101,33 +791,12 @@ export const getComment = /* GraphQL */ `
         type
         spaceID
         Comments {
-          items {
-            id
-            content
-            eventID
-            createdAt
-            updatedAt
-            __typename
-          }
           nextToken
           __typename
         }
         World {
           id
           name
-          Spaces {
-            nextToken
-            __typename
-          }
-          Creator {
-            id
-            name
-            createdAt
-            updatedAt
-            creatorWorldId
-            creatorStoreId
-            __typename
-          }
           createdAt
           updatedAt
           worldCreatorId
@@ -1137,18 +806,6 @@ export const getComment = /* GraphQL */ `
           id
           title
           wID
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Events {
-            nextToken
-            __typename
-          }
           createdAt
           updatedAt
           __typename
@@ -1180,26 +837,6 @@ export const listComments = /* GraphQL */ `
           name
           type
           spaceID
-          Comments {
-            nextToken
-            __typename
-          }
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Space {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           createdAt
           updatedAt
           eventWorldId
@@ -1238,26 +875,6 @@ export const commentsByEventID = /* GraphQL */ `
           name
           type
           spaceID
-          Comments {
-            nextToken
-            __typename
-          }
-          World {
-            id
-            name
-            createdAt
-            updatedAt
-            worldCreatorId
-            __typename
-          }
-          Space {
-            id
-            title
-            wID
-            createdAt
-            updatedAt
-            __typename
-          }
           createdAt
           updatedAt
           eventWorldId

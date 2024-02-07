@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Store, Creator } from "../models";
 import { FlexProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -27,8 +26,8 @@ export declare type StoreCardOverridesProps = {
     "Store Name"?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type StoreCardProps = React.PropsWithChildren<Partial<FlexProps> & {
-    store?: Store;
-    creator?: Creator;
+    store?: any;
+    creator?: any;
 } & {
     overrides?: StoreCardOverridesProps | undefined | null;
 }>;

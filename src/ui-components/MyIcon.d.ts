@@ -21,7 +21,7 @@ export declare type MyIconOverridesProps = {
     MyIcon?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
 export declare type MyIconProps = React.PropsWithChildren<Partial<IconProps> & {
-    type?: "Avatar-NoFill" | "AvatarFill" | "CalendarFill" | "CalendarStroke" | "HomeFilled" | "MarketFill" | "MarketNoFill" | "PersonFill" | "PersonNoFill" | "alert" | "arrow-right" | "authentication" | "bookmark_border" | "chat" | "chat-bubble-outline" | "checkmark" | "close" | "content" | "dashboard" | "data" | "delete" | "edit" | "email" | "favorite" | "favorite_border" | "file" | "function" | "group" | "homeStroke" | "info" | "instagram" | "location" | "more_horiz" | "more_vert" | "notification" | "phone" | "reply" | "send" | "settings" | "share" | "shopping_bag" | "shuffle" | "storage" | "twitter" | "warning";
+    type?: "Avatar-NoFill" | "AvatarFill" | "CalendarFill" | "CalendarStroke" | "Dashboard" | "HomeFilled" | "MarketFill" | "MarketNoFill" | "Notif-Filled" | "Notif2" | "PersonFill" | "PersonNoFill" | "Question" | "Settings" | "Sign Out" | "alert" | "arrow-right" | "authentication" | "bookmark_border" | "chat" | "chat-bubble-outline" | "checkmark" | "close" | "content" | "dashboard" | "data" | "delete" | "edit" | "email" | "favorite" | "favorite_border" | "file" | "function" | "group" | "homeStroke" | "info" | "instagram" | "location" | "more_horiz" | "more_vert" | "notification" | "phone" | "reply" | "send" | "settings" | "share" | "shopping_bag" | "shuffle" | "storage" | "twitter" | "warning";
 } & {
     overrides?: MyIconOverridesProps | undefined | null;
 }>;

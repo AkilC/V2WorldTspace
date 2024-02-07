@@ -5,6 +5,7 @@ import { WorldContext } from '../tspace_components/contexts/WorldContext';
 import { VideoStateContext } from '../tspace_components/contexts/VideoStateContext';
 import { DoubleSide, MeshBasicMaterial, PlaneGeometry, Mesh, VideoTexture } from 'three';
 import { useSocket } from '../tspace_components/contexts/SocketContext';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 const Background = () => {
   const { gl } = useThree();
@@ -144,14 +145,30 @@ const Watch = ({ characterRef }) => {
     };
   }, []);
 
+  const [myScene, setMyScene] = useState(null);
+
+  useEffect(() => {
+    console.log('TestScene mounted');
+  
+    const loader = new GLTFLoader();
+    loader.load(`${process.env.PUBLIC_URL}/assets/scenes/v2environment.glb`, (gltf) => {
+      setMyScene(gltf.scene);
+    });
+  
+    return () => {
+      console.log('TestScene unmounted');
+    };
+  }, []);
+
   const videoMaterial = videoTexture ? new MeshBasicMaterial({ map: videoTexture }) : null;
   const videoScreenGeometry = new PlaneGeometry(16, 9);
 
   return (
     <>
+      {myScene && <primitive object={myScene} scale={[0.5, 0.5, 0.5]}/>}
       <Stars />
-      <ambientLight intensity={1} />
-      <directionalLight
+      <ambientLight intensity={0.3} />
+      {/* <directionalLight
         castShadow
         position={[0, 10, -5]}
         intensity={1}
@@ -162,12 +179,12 @@ const Watch = ({ characterRef }) => {
         shadow-camera-right={10}
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
-      />
-      <directionalLight
+      /> */}
+      {/* <directionalLight
         castShadow
         position={[0, 2, 50]}
         intensity={1}
-      />
+      /> */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 100]}>
         <planeBufferGeometry attach="geometry" args={[300, 300]} />
         <meshStandardMaterial attach="material" color={'#808080'} />
@@ -177,7 +194,7 @@ const Watch = ({ characterRef }) => {
         <mesh
           geometry={videoScreenGeometry}
           material={videoMaterial}
-          position={[0, 7, 30]}
+          position={[0, 8, 30]}
           rotation={[0, Math.PI, 0]}
           scale={[1.8, 1.8, 1.8]}
         />

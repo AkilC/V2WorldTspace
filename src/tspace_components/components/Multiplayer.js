@@ -4,10 +4,12 @@ import OtherPlayer from './OtherPlayer';
 import Character from './Character';
 import { Box } from '@react-three/drei';
 import * as cannon from 'cannon-es';
+import { usePlayerPositions } from '../contexts/PlayerPositionsProvider';
 
 const Multiplayer = () => {
   const { room } = useSocket();
   const [players, setPlayers] = useState({});
+  const { updateOtherPlayerPosition } = usePlayerPositions();
 
   useEffect(() => {
     if (!room) return;
@@ -23,7 +25,9 @@ const Multiplayer = () => {
     });
 
     room.onMessage('playerUpdate', (playerData) => {
+      updateOtherPlayerPosition(playerData.id, playerData.position);
       setPlayers((prevPlayers) => {
+
         // Check if the incoming data is different from the current state
         if (JSON.stringify(prevPlayers[playerData.id]) !== JSON.stringify(playerData)) {
           return {
