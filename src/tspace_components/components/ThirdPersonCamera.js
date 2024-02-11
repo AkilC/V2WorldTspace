@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import Character from './Character';
@@ -6,12 +6,14 @@ import { useCharacterControls } from './useCharacterControls';
 import * as THREE from 'three';
 import { useSocket } from '../contexts/SocketContext';
 import { usePlayerPositions } from '../contexts/PlayerPositionsProvider';
+import { LiveKitContext } from '../contexts/LiveKitContext';
 
 const ThirdPersonCamera = ({ characterRef }) => {
   const { setDefaultCamera } = useThree();
   const cameraRef = useRef();
   const [joystickData, setJoystickData] = useState(null);
   const { updateLocalPlayerPosition } = usePlayerPositions();
+  const { audioListener } = useContext(LiveKitContext);
 
   const { room } = useSocket();
 
@@ -44,6 +46,16 @@ const ThirdPersonCamera = ({ characterRef }) => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [lastClientX, setLastClientX] = useState(null);
+
+  useEffect(() => {
+    // Attach the audio listener to the camera
+    if (cameraRef.current) {
+      cameraRef.current.add(audioListener);
+      console.log("Audio listener attached to camera:", audioListener);
+      // Optionally log the camera to see its children or attached objects
+      console.log("Camera with attached audio listener:", cameraRef.current);
+    }
+}, [cameraRef, audioListener]);
 
   useEffect(() => {
     const handlePointerDown = (event) => {

@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useSocket } from '../contexts/SocketContext';
 import OtherPlayer from './OtherPlayer';
 import Character from './Character';
 import { Box } from '@react-three/drei';
 import * as cannon from 'cannon-es';
 import { usePlayerPositions } from '../contexts/PlayerPositionsProvider';
+import { LiveKitContext } from '../contexts/LiveKitContext';
 
 const Multiplayer = () => {
   const { room } = useSocket();
   const [players, setPlayers] = useState({});
   const { updateOtherPlayerPosition } = usePlayerPositions();
+  const { positionalAudios } = useContext(LiveKitContext);
+  //console.log("Positional Audios from Context:", positionalAudios);
+
 
   useEffect(() => {
     if (!room) return;
@@ -61,8 +65,13 @@ const Multiplayer = () => {
   return (
     <>
         {Object.entries(players)
-        .filter(([, playerData]) => playerData.position !== undefined && playerData.rotation !== undefined)
+        .filter(([id, playerData]) => playerData.position !== undefined && playerData.rotation !== undefined)
         .map(([id, playerData]) => {
+          if (id === room.sessionId) {
+            return null; // Or handle the local player differently
+          }
+          // Retrieve positional audio for the current player
+            const playerAudio = positionalAudios[id];
             const receivedRotationAngle = playerData.rotation;
             const remoteCharacterQuaternion = new cannon.Quaternion();
             remoteCharacterQuaternion.setFromAxisAngle(new cannon.Vec3(0, 1, 0), receivedRotationAngle);
@@ -73,7 +82,7 @@ const Multiplayer = () => {
                 playerData.position.z * 0.98,
             ];
 
-            
+            //console.log(`Positional Audio for player ${id}:`, positionalAudios[id]);
             return (
                 <OtherPlayer
                   key={id}
@@ -81,6 +90,7 @@ const Multiplayer = () => {
                   quaternion={remoteCharacterQuaternion}
                   animation={playerData.animation}
                   color={playerData.color || "#5F5F5F"}
+                  positionalAudio={playerAudio}
                 />
               );
         })}
